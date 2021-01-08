@@ -1,20 +1,200 @@
 {
   "inputs": {
-    "_dist_/app.js": {
-      "bytes": 18734,
+    "web_modules/redom.js": {
+      "bytes": 12711,
       "imports": []
+    },
+    "_dist_/recordBtn.js": {
+      "bytes": 3914,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        }
+      ]
+    },
+    "_dist_/recordBuff.js": {
+      "bytes": 1475,
+      "imports": []
+    },
+    "_dist_/sampleBank.js": {
+      "bytes": 1808,
+      "imports": []
+    },
+    "_dist_/sampleSelect.js": {
+      "bytes": 889,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        }
+      ]
+    },
+    "_dist_/audioNodeExt.js": {
+      "bytes": 1462,
+      "imports": []
+    },
+    "_dist_/rangeNodeUI.js": {
+      "bytes": 1766,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        },
+        {
+          "path": "_dist_/audioNodeExt.js"
+        }
+      ]
+    },
+    "_dist_/compressorCtrl.js": {
+      "bytes": 1153,
+      "imports": [
+        {
+          "path": "_dist_/rangeNodeUI.js"
+        }
+      ]
+    },
+    "_dist_/distortionCtrl.js": {
+      "bytes": 866,
+      "imports": [
+        {
+          "path": "_dist_/rangeNodeUI.js"
+        }
+      ]
+    },
+    "_dist_/lowpassCtrl.js": {
+      "bytes": 448,
+      "imports": [
+        {
+          "path": "_dist_/rangeNodeUI.js"
+        }
+      ]
+    },
+    "_dist_/playBtn.js": {
+      "bytes": 881,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        }
+      ]
+    },
+    "_dist_/speedCtrl.js": {
+      "bytes": 387,
+      "imports": [
+        {
+          "path": "_dist_/rangeNodeUI.js"
+        }
+      ]
+    },
+    "_dist_/volumeCtrl.js": {
+      "bytes": 440,
+      "imports": [
+        {
+          "path": "_dist_/rangeNodeUI.js"
+        }
+      ]
+    },
+    "_dist_/sampleUI.js": {
+      "bytes": 2394,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        },
+        {
+          "path": "_dist_/compressorCtrl.js"
+        },
+        {
+          "path": "_dist_/distortionCtrl.js"
+        },
+        {
+          "path": "_dist_/lowpassCtrl.js"
+        },
+        {
+          "path": "_dist_/playBtn.js"
+        },
+        {
+          "path": "_dist_/speedCtrl.js"
+        },
+        {
+          "path": "_dist_/volumeCtrl.js"
+        }
+      ]
+    },
+    "_dist_/schallvernichtung.js": {
+      "bytes": 3199,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        },
+        {
+          "path": "_dist_/recordBtn.js"
+        },
+        {
+          "path": "_dist_/recordBuff.js"
+        },
+        {
+          "path": "_dist_/sampleBank.js"
+        },
+        {
+          "path": "_dist_/sampleSelect.js"
+        },
+        {
+          "path": "_dist_/sampleUI.js"
+        }
+      ]
     }
   },
   "outputs": {
-    "../node_modules/.cache/snowpack/~~bundle~~/_dist_/app.js": {
+    "../node_modules/.cache/snowpack/~~bundle~~/_dist_/schallvernichtung.js": {
       "imports": [],
-      "exports": [],
+      "exports": [
+        "Schallvernichtung"
+      ],
       "inputs": {
-        "_dist_/app.js": {
-          "bytesInOutput": 18673
+        "web_modules/redom.js": {
+          "bytesInOutput": 5376
+        },
+        "_dist_/recordBtn.js": {
+          "bytesInOutput": 2710
+        },
+        "_dist_/recordBuff.js": {
+          "bytesInOutput": 885
+        },
+        "_dist_/sampleBank.js": {
+          "bytesInOutput": 1090
+        },
+        "_dist_/sampleSelect.js": {
+          "bytesInOutput": 574
+        },
+        "_dist_/audioNodeExt.js": {
+          "bytesInOutput": 930
+        },
+        "_dist_/rangeNodeUI.js": {
+          "bytesInOutput": 962
+        },
+        "_dist_/compressorCtrl.js": {
+          "bytesInOutput": 913
+        },
+        "_dist_/distortionCtrl.js": {
+          "bytesInOutput": 569
+        },
+        "_dist_/lowpassCtrl.js": {
+          "bytesInOutput": 293
+        },
+        "_dist_/playBtn.js": {
+          "bytesInOutput": 510
+        },
+        "_dist_/speedCtrl.js": {
+          "bytesInOutput": 233
+        },
+        "_dist_/volumeCtrl.js": {
+          "bytesInOutput": 297
+        },
+        "_dist_/sampleUI.js": {
+          "bytesInOutput": 1425
+        },
+        "_dist_/schallvernichtung.js": {
+          "bytesInOutput": 1957
         }
       },
-      "bytes": 18674
+      "bytes": 18756
     }
   }
 }
