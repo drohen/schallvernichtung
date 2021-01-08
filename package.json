@@ -1,8 +1,8 @@
 {
 	"name": "schallvernichtung",
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"description": "record samples, loop them, crush them",
-	"main": "build/_dist_/",
+	"main": "build/_dist_/schallvernichtung.js",
 	"scripts": {
 		"start": "snowpack dev",
 		"build": "snowpack build",
@@ -35,7 +35,7 @@
 		"typescript": "^4.0.3"
 	},
 	"files": [
-		"build"
+		"build/_dist_"
 	],
 	"types": "build/_dist_/schallvernichtung.d.ts"
 }
