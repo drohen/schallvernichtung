@@ -5,7 +5,7 @@ import { SampleBank, SampleCoreProvider } from "./sampleBank"
 import { SampleSelect, SampleSelectHandler } from "./sampleSelect"
 import { SampleUI } from "./sampleUI"
 
-class App 
+export class Schallvernichtung 
 implements 
 	RecordHandler,
 	RecordedBufferHandler, 
@@ -32,9 +32,9 @@ implements
 
 	private sampleList: SampleSelect
 
-	public static init()
+	public static init(): void
 	{
-		new App()
+		new Schallvernichtung()
 	}
 
 	constructor()
@@ -197,5 +197,3 @@ implements
 		this.sampleBlocks[ index ].show()
 	}
 }
-
-App.init()
