@@ -1,0 +1,26 @@
+{
+    "mount": {
+        "public": "/",
+        "src": "/_dist_"
+    },
+    "plugins": [
+        [
+            "@snowpack/plugin-run-script",
+            {
+                "cmd": "tsc --build tsconfig.json",
+                "watch": "$1 --watch"
+            }
+        ]
+    ],
+	"experiments": {
+		"optimize": {
+			"entrypoints": ["_dist_/app.js"],
+			"bundle": true,
+			"minify": true,
+			"target": "es2020"
+		}
+	},
+    "installOptions": {
+        "installTypes": true
+    }
+}
