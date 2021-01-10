@@ -1,35 +1,25 @@
-import { RedomComponent } from "redom";
-export interface RecordHandler {
-    /**
-     * Handle stream then return promise so the button
-     * can update its state to handle recording button
-     * click to start recording
-     */
-    handleStream: (stream: MediaStream) => Promise<void>;
-    onError: () => void;
-    startRecording: () => Promise<void>;
-    stopRecording: () => Promise<void>;
-    reloadContext: () => Promise<void>;
+import type { Entity } from "./entity";
+import type { RedomComponent } from "redom";
+import { RecordingEntity, RecordingState } from "./recordingEntity";
+import { ButtonInteractionHandler, UIButton } from "./uiButton";
+export interface RecordButtonHandler {
+    recordButtonOnStart: () => void;
+    recordButtonOnStop: () => void;
+    recordButtonOnReload: () => void;
 }
-export declare class RecordBtn implements RedomComponent {
+export declare class RecordBtn implements RedomComponent, RecordingEntity, ButtonInteractionHandler, Entity {
+    id: string;
     private handler;
     private recordLength;
-    el: HTMLButtonElement;
-    private state;
-    private error?;
-    private mediaTracks;
+    el: UIButton;
+    isRecordingEntity: true;
     private recordingTimeout;
-    constructor(handler: RecordHandler, recordLength: number);
-    private reset;
-    private setError;
-    private setRecordingReady;
-    private requestDevice;
-    private disable;
-    private enable;
+    constructor(id: string, handler: RecordButtonHandler, recordLength: number);
     private stopRecording;
-    private recordBtnDown;
-    private recordBtnUp;
-    private recordBtnEvent;
-    getError(): Error | undefined;
+    onDown(state: string): void;
+    onUp(state: string): void;
+    onLeave(state: string): void;
+    onRecordingStateChanged(state: RecordingState): void;
+    onRecordingError(): void;
 }
 //# sourceMappingURL=recordBtn.d.ts.map

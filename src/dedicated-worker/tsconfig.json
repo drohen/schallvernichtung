@@ -1,0 +1,21 @@
+{
+	"extends": "../tsconfig-base.json",
+	"compilerOptions": {
+		"lib": [
+			"esnext",
+			"webworker"
+		],
+		"rootDir": ".",
+		"rootDirs": ["../dedicated-worker", "../recording-helpers", "../audio-worklet"],
+		"composite": true
+	},
+	"references": [
+		{
+			"path": "../audio-worklet"
+		},
+		{
+			"path": "../recording-helpers"
+		}
+	],
+	"include": ["."]
+}

@@ -1,0 +1,18 @@
+{
+	"extends": "../tsconfig-base.json",
+	"compilerOptions": {
+		"lib": [
+			"esnext",
+			"dom"
+		],
+		"rootDir": ".",
+		"rootDirs": ["../entity-helpers", "../recording-helpers"],
+		"composite": true
+	},
+	"references": [
+		{
+			"path": "../entity-helpers"
+		}
+	],
+	"include": ["."]
+}

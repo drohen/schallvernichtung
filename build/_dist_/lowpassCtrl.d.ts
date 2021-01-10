@@ -1,5 +1,5 @@
-import { RangeNodeUI, RangeCoreProvider } from "./rangeNodeUI";
-export declare class LowpassControl extends RangeNodeUI {
+import { UIRangeNode, RangeCoreProvider } from "./uiRangeNode";
+export declare class LowpassControl extends UIRangeNode {
     private node;
     constructor(core: RangeCoreProvider);
     protected onChange(value: number): void;

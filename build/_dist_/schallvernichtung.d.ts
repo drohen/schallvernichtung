@@ -1,24 +1,23 @@
-import { RecordHandler } from "./recordBtn";
-import { RecordedBufferHandler } from "./recordBuff";
+import type { Entity } from "./entity";
+import { RecordingSystemCoreProvider } from "./recordingHandler";
 import { SampleCoreProvider } from "./sampleBank";
 import { SampleSelectHandler } from "./sampleSelect";
-export declare class Schallvernichtung implements RecordHandler, RecordedBufferHandler, SampleCoreProvider, SampleSelectHandler {
+export declare class Schallvernichtung implements SampleCoreProvider, SampleSelectHandler, RecordingSystemCoreProvider {
     private baseEl;
     context: AudioContext;
     private recordBtn;
     private sourceNode?;
-    private processorNode;
-    private recordBuff;
+    private recordingHandler;
     private sampleBlocks;
     private sampleBank;
     private samplesMount;
     private sampleList;
+    entities: Entity[];
     static init(): void;
     constructor();
     private getElOrThrow;
     private wrap;
     private setUI;
-    private processChunk;
     onRecorded(data: Float32Array): void;
     handleStream(stream: MediaStream): Promise<void>;
     onError(): void;

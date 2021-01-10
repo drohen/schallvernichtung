@@ -28,13 +28,7 @@
 		"declaration": true,
 		"emitDeclarationOnly": true,
 		"declarationMap": true,
-		"declarationDir": "build/_dist_"
-	},
-	"include": [
-		"src",
-		"types"
-	],
-	"exclude": [
-		"node_modules"
-	]
+		"declarationDir": "../build/_dist_",
+		"composite": true
+	}
 }

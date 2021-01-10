@@ -1,0 +1,21 @@
+{
+	"extends": "./tsconfig-base.json",
+	"files": [],
+	"references": [
+		{
+			"path": "./dedicated-worker"
+		},
+		{
+			"path": "./entity-helpers"
+		},
+		{
+			"path": "./main"
+		},
+		{
+			"path": "./audio-worklet"
+		},
+		{
+			"path": "./recording-helpers"
+		}
+	]
+}
