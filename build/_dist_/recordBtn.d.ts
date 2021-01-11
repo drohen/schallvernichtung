@@ -6,6 +6,7 @@ export interface RecordButtonHandler {
     recordButtonOnStart: () => void;
     recordButtonOnStop: () => void;
     recordButtonOnReload: () => void;
+    recordButtonOnRequest: () => void;
 }
 export declare class RecordBtn implements RedomComponent, RecordingEntity, ButtonInteractionHandler, Entity {
     id: string;
@@ -19,6 +20,7 @@ export declare class RecordBtn implements RedomComponent, RecordingEntity, Butto
     onDown(state: string): void;
     onUp(state: string): void;
     onLeave(state: string): void;
+    onClick(state: string): void;
     onRecordingStateChanged(state: RecordingState): void;
     onRecordingError(): void;
 }

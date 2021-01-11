@@ -261,14 +261,9 @@
         "signature": "1953de25dfa1608f82e8e0c9b08437de2dbc72b0f51668ac32e0c2e711d9aa34",
         "affectsGlobalScope": false
       },
-      "../../build/_dist_/recordBuff.d.ts": {
-        "version": "4af2326af7a0732cfe8d62654342230f61c1eecb1905d54bd842d4215414a4c2",
-        "signature": "4af2326af7a0732cfe8d62654342230f61c1eecb1905d54bd842d4215414a4c2",
-        "affectsGlobalScope": false
-      },
       "../../build/_dist_/recordingEntity.d.ts": {
-        "version": "8bd17042bc23fd5d49a6f95f3833f1eecb298ff1cfa360948280c1610ad0e6ec",
-        "signature": "8bd17042bc23fd5d49a6f95f3833f1eecb298ff1cfa360948280c1610ad0e6ec",
+        "version": "15221f7d474b7cffacdfce6eb75ad2e01b51e42ee4e7980ea6a4bc8fdbe3e502",
+        "signature": "15221f7d474b7cffacdfce6eb75ad2e01b51e42ee4e7980ea6a4bc8fdbe3e502",
         "affectsGlobalScope": false
       },
       "./uiButton.ts": {
@@ -277,13 +272,13 @@
         "affectsGlobalScope": false
       },
       "./recordBtn.ts": {
-        "version": "6dd3ea866b7a2b2efe74c219c7e346d825e4e1970d7d51996f766cc6f3ae0f8b",
-        "signature": "1f678d18ab1ba9eb6c567f6aa9f83334974eeaa7cb7307743a808c2a2bc41d51",
+        "version": "04340d77efc8d9d2d56d9bd9f62008da3ab00f3ec306072905fe13ca39fb8ee9",
+        "signature": "d7e925e419e6b77b0a2d5b02e4f58cef9079557722fde53524d70be3e5ede53f",
         "affectsGlobalScope": false
       },
       "./recordingHandler.ts": {
-        "version": "e485e4a494d2f29fbd5f52c15d16e09988c453d8b7ee5f29476355a793ed44b4",
-        "signature": "865ca3e3106cd2be96c9ecaa8d5432365c570d0e7629c0c45c865bac9a1243a0",
+        "version": "a3265a4045d0d8a1e79a2c4ff8c5dcf558157a107e0c71d8df0de0c8f9effb85",
+        "signature": "4903f463ffa8159958836cca6ad3e52ccba093a499791ec5f79414ff80258e10",
         "affectsGlobalScope": false
       },
       "./sampleBank.ts": {
@@ -312,8 +307,8 @@
         "affectsGlobalScope": false
       },
       "./schallvernichtung.ts": {
-        "version": "f223ddca7f199a5e5023f9a1e2b4dd733de6b0abe1ac414589d511116d589461",
-        "signature": "a70081f971eb0a3cd64515cfa9670b3b24ff3502718f1f4991a47bf9d5b83e55",
+        "version": "1bbf9b9cc6720f64fdbe573973b5ae02ed16b21dbc5c12a5d5a0e1c10159ca29",
+        "signature": "c8b00b6ea3f9fb2f4ee6cd1e39beef40c03e703ba1d742c7cbd1d11f6cf8861e",
         "affectsGlobalScope": false
       },
       "../../node_modules/@types/node/globals.d.ts": {
@@ -629,15 +624,13 @@
       "rootDirs": [
         "./",
         "../dedicated-worker",
-        "../entity-helpers",
-        "../recording-helpers"
+        "../entity-helpers"
       ],
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "../../build/_dist_/recordingEntity.d.ts": [
-        "../../build/_dist_/entity.d.ts",
-        "../../build/_dist_/recordBuff.d.ts"
+        "../../build/_dist_/entity.d.ts"
       ],
       "../../node_modules/@types/cacheable-request/index.d.ts": [
         "../../node_modules/@types/http-cache-semantics/index.d.ts",
@@ -890,8 +883,7 @@
     },
     "exportedModulesMap": {
       "../../build/_dist_/recordingEntity.d.ts": [
-        "../../build/_dist_/entity.d.ts",
-        "../../build/_dist_/recordBuff.d.ts"
+        "../../build/_dist_/entity.d.ts"
       ],
       "../../node_modules/@types/cacheable-request/index.d.ts": [
         "../../node_modules/@types/http-cache-semantics/index.d.ts",
@@ -1135,7 +1127,6 @@
     },
     "semanticDiagnosticsPerFile": [
       "../../build/_dist_/entity.d.ts",
-      "../../build/_dist_/recordBuff.d.ts",
       "../../build/_dist_/recordingEntity.d.ts",
       "../../node_modules/@types/cacheable-request/index.d.ts",
       "../../node_modules/@types/cheerio/index.d.ts",

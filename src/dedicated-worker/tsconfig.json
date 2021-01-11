@@ -6,15 +6,12 @@
 			"webworker"
 		],
 		"rootDir": ".",
-		"rootDirs": ["../dedicated-worker", "../recording-helpers", "../audio-worklet"],
+		"rootDirs": ["../dedicated-worker", "../entity-helpers"],
 		"composite": true
 	},
 	"references": [
 		{
-			"path": "../audio-worklet"
-		},
-		{
-			"path": "../recording-helpers"
+			"path": "../entity-helpers"
 		}
 	],
 	"include": ["."]

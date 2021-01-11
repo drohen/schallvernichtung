@@ -19,19 +19,22 @@ export interface RecordingSystemCoreProvider {
      * click to start recording
      */
     handleStream: (stream: MediaStream) => Promise<void>;
+    onRecorded: (buffer: Float32Array) => void;
+    getRecorderInputNode: () => AudioNode;
 }
 export declare class RecordingHandler implements RecordButtonHandler {
     private core;
     private workerPath;
     private chunkSize;
+    private recordLength;
     private recorderNode?;
     private mediaTracks;
     private recorder?;
     private state;
     constructor(core: RecordingSystemCoreProvider, workerPath: string, chunkSize: number, recordLength: number);
-    private addRecorder;
+    private setRecorder;
+    private unsetRecorder;
     private handleRecorderMessage;
-    private addWorkletScript;
     private processChunk;
     private isRecordingEntity;
     private postRecorder;
@@ -41,5 +44,6 @@ export declare class RecordingHandler implements RecordButtonHandler {
     recordButtonOnStart(): void;
     recordButtonOnStop(): void;
     recordButtonOnReload(): void;
+    recordButtonOnRequest(): void;
 }
 //# sourceMappingURL=recordingHandler.d.ts.map

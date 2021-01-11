@@ -29,5 +29,6 @@ export declare class Schallvernichtung implements SampleCoreProvider, SampleSele
     onSampleAdd(index: number): void;
     onLabelChange(): void;
     onSampleSelected(index: number, previous?: number): void;
+    getRecorderInputNode(): AudioNode;
 }
 //# sourceMappingURL=schallvernichtung.d.ts.map

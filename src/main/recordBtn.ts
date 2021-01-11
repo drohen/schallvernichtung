@@ -10,6 +10,8 @@ export interface RecordButtonHandler
 	recordButtonOnStop: () => void
 
 	recordButtonOnReload: () => void
+
+	recordButtonOnRequest: () => void
 }
 
 enum ButtonState
@@ -39,7 +41,7 @@ export class RecordBtn implements RedomComponent, RecordingEntity, ButtonInterac
 	{
 		this.el = new UIButton(
 			this,
-			ButtonState,
+			Object.values( ButtonState ).reduce( ( obj, val ) => Object.assign( obj, { [ val ]: val } ), {} ),
 			ButtonState.noDevice
 		)
 
@@ -52,6 +54,8 @@ export class RecordBtn implements RedomComponent, RecordingEntity, ButtonInterac
 		this.onUp = this.onUp.bind( this )
 
 		this.onLeave = this.onLeave.bind( this )
+
+		this.onClick = this.onClick.bind( this )
 
 		this.recordingTimeout = 0
 	}
@@ -82,6 +86,28 @@ export class RecordBtn implements RedomComponent, RecordingEntity, ButtonInterac
 		if ( state !== ButtonState.recording ) return
 
 		this.stopRecording()
+	}
+
+	public onClick( state: string ): void
+	{
+		switch ( state )
+		{
+			case ButtonState.error:
+
+				this.handler.recordButtonOnReload()
+
+				break
+
+			case ButtonState.noDevice:
+				
+				this.handler.recordButtonOnRequest()
+
+				break
+
+			default:
+				// do nothing
+				break
+		}
 	}
 
 	public onRecordingStateChanged( state: RecordingState ): void

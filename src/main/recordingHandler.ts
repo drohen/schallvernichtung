@@ -1,6 +1,17 @@
 import type { Entity } from "./entity"
 import type { RecordButtonHandler } from "./recordBtn"
-import { RecordingEntity, RecordingState, RecordingWorkerChunkMessage, RecordingWorkerCloseMessage, RecordingWorkerInitMessage, RecordingWorkerStartMessage, RecordingWorkerStopMessage } from "./recordingEntity"
+import { 
+	RecordingEntity, 
+	RecordingState, 
+	RecordingWorkerChunkMessage, 
+	RecordingWorkerCloseMessage, 
+	RecordingWorkerInitMessage, 
+	RecordingWorkerStartMessage, 
+	RecordingWorkerStopMessage, 
+	RecordingWorkerOutputBufferMessage, 
+	RecordingWorkerOutputReadyMessage,
+	RecordingWorkerOutputRecordingMessage
+} from "./recordingEntity"
 
 /**
  * Recording system will manage the APIs responsible
@@ -24,6 +35,10 @@ export interface RecordingSystemCoreProvider
 	 * click to start recording
 	 */
 	handleStream: ( stream: MediaStream ) => Promise<void>
+
+	onRecorded: ( buffer: Float32Array ) => void
+
+	getRecorderInputNode: () => AudioNode
 }
 
 type WorkerMessage = 
@@ -32,6 +47,11 @@ type WorkerMessage =
 	| RecordingWorkerStartMessage
 	| RecordingWorkerChunkMessage
 	| RecordingWorkerStopMessage
+
+type WorkerOutputMessage = 
+	| RecordingWorkerOutputBufferMessage 
+	| RecordingWorkerOutputReadyMessage
+	| RecordingWorkerOutputRecordingMessage
 
 export class RecordingHandler implements RecordButtonHandler
 {
@@ -47,27 +67,21 @@ export class RecordingHandler implements RecordButtonHandler
 		private core: RecordingSystemCoreProvider,
 		private workerPath: string,
 		private chunkSize: number,
-		recordLength: number
+		private recordLength: number
 	)
 	{
 		this.mediaTracks = []
 
-		this.addWorkletScript().then( this.addRecorder )
-
 		this.state = RecordingState.noDevice
 
 		this.handleRecorderMessage = this.handleRecorderMessage.bind( this )
-	}
 
-	private addRecorder()
-	{
 		if ( this.core.context.audioWorklet ) 
 		{
-			this.recorderNode = new AudioWorkletNode( this.core.context, `recording-worklet`, { numberOfOutputs: 0 } )
-
-			this.recorder = this.recorderNode.port
+			this.core.context.audioWorklet.addModule( this.workerPath )
+				.catch( error => this.emit( `error`, undefined, error ) )
 		}
-		else 
+		else
 		{
 			this.recorderNode = this.core.context.createScriptProcessor( this.chunkSize, 1, 1 )
 
@@ -76,23 +90,84 @@ export class RecordingHandler implements RecordButtonHandler
 			this.recorderNode.addEventListener( `audioprocess`, this.processChunk )
 
 			this.recorderNode.connect( this.core.context.destination )
-
-			this.recorder = new Worker( this.workerPath )
 		}
-
-		this.recorder.onmessage = this.handleRecorderMessage
 	}
 
-	private handleRecorderMessage( event: MessageEvent )
-	{
-		//
-	}
-
-	private async addWorkletScript()
+	private setRecorder()
 	{
 		if ( this.core.context.audioWorklet ) 
 		{
-			this.core.context.audioWorklet.addModule( this.workerPath )
+			this.recorderNode = new AudioWorkletNode( 
+				this.core.context, 
+				`recording-worklet`, 
+				{ numberOfOutputs: 0, numberOfInputs: 1 } )
+
+			if ( !this.recorderNode )
+			{
+				throw Error( `No recording node available to connect` )
+			}
+	
+			this.core.getRecorderInputNode().connect( this.recorderNode )
+
+			this.recorder = this.recorderNode.port
+		}
+		else 
+		{
+			this.recorder = new Worker( new URL( this.workerPath, import.meta.url ), { name: `recording-worker`, type: `module` } )
+		}
+
+		this.recorder.onmessage = this.handleRecorderMessage
+
+		this.postRecorder( {
+			command: `init`,
+			data: {
+				chunkSize: this.chunkSize,
+				maxLength: this.recordLength,
+				sampleRate: this.core.context.sampleRate,
+			}
+		} )
+	}
+
+	private unsetRecorder()
+	{
+		if ( this.core.context.audioWorklet ) 
+		{
+			if ( !this.recorderNode )
+			{
+				throw Error( `No recording node available to disconnect` )
+			}
+	
+			this.core.getRecorderInputNode().disconnect( this.recorderNode )
+		}
+
+		this.recorder = undefined
+	}
+
+	private handleRecorderMessage( event: MessageEvent<WorkerOutputMessage> )
+	{
+		switch ( event.data.message )
+		{
+			case `ready`:
+
+				this.emit( `state`, RecordingState.ready )
+				
+				break
+
+			case `recording`:
+
+				this.emit( `state`, RecordingState.recording )
+
+				break
+
+			case `done`:
+
+				this.unsetRecorder()
+
+				this.emit( `state`, RecordingState.idle )
+
+				this.core.onRecorded( event.data.buffer )
+
+				break
 		}
 	}
 
@@ -123,6 +198,8 @@ export class RecordingHandler implements RecordButtonHandler
 
 				this.state = RecordingState.closing
 
+				this.postRecorder( { command: `stop` } )
+
 				return true
 
 			case RecordingState.error:
@@ -133,7 +210,8 @@ export class RecordingHandler implements RecordButtonHandler
 
 			case RecordingState.idle:
 
-				if ( this.state !== RecordingState.closing ) return false
+				if ( this.state !== RecordingState.closing
+					&& this.state !== RecordingState.requestingDevice ) return false
 
 				this.state = RecordingState.idle
 
@@ -149,7 +227,7 @@ export class RecordingHandler implements RecordButtonHandler
 
 			case RecordingState.recording:
 
-				if ( this.state !== RecordingState.starting ) return false
+				if ( this.state !== RecordingState.ready ) return false
 
 				this.state = RecordingState.recording
 
@@ -165,11 +243,23 @@ export class RecordingHandler implements RecordButtonHandler
 
 				return true
 
+			case RecordingState.ready:
+
+				if ( this.state !== RecordingState.starting ) return false
+
+				this.state = RecordingState.ready
+
+				this.postRecorder( { command: `start` } )
+
+				return true
+
 			case RecordingState.starting:
 
 				if ( this.state !== RecordingState.idle ) return false
 
 				this.state = RecordingState.starting
+
+				this.setRecorder()
 
 				return true
 		}
@@ -221,17 +311,11 @@ export class RecordingHandler implements RecordButtonHandler
 	public recordButtonOnStart(): void
 	{
 		this.emit( `state`, RecordingState.starting )
-
-		// the recording worker/buffer system should now
-		// alert when recording has started
 	}
 
 	public recordButtonOnStop(): void
 	{
 		this.emit( `state`, RecordingState.closing )
-
-		// the recording worker/buffer system should now
-		// alert when recording has stopped
 	}
 
 	public recordButtonOnReload(): void
@@ -246,4 +330,8 @@ export class RecordingHandler implements RecordButtonHandler
 		this.emit( `state`, RecordingState.noDevice )
 	}
 
+	public recordButtonOnRequest(): void
+	{
+		this.emit( `state`, RecordingState.requestingDevice )
+	}
 }

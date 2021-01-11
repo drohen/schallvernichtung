@@ -1,4 +1,3 @@
-import type { RecordedBufferHandler } from "./recordBuff"
 import type { Entity } from "./entity"
 
 export enum RecordingState
@@ -7,6 +6,7 @@ export enum RecordingState
 	requestingDevice,
 	idle,
 	starting,
+	ready,
 	recording,
 	closing,
 	error
@@ -32,8 +32,7 @@ export interface RecordingWorkerInitMessage
 	data: {
 		sampleRate: number,
 		maxLength: number,
-		chunkSize: number,
-		handler: RecordedBufferHandler
+		chunkSize: number
 	}
 }
 
@@ -51,4 +50,20 @@ export interface RecordingWorkerChunkMessage
 {
 	command: `chunk`
 	buffer: Float32Array
+}
+
+export interface RecordingWorkerOutputReadyMessage
+{
+	message: `ready`
+}
+
+export interface RecordingWorkerOutputBufferMessage
+{
+	message: `done`,
+	buffer: Float32Array
+}
+
+export interface RecordingWorkerOutputRecordingMessage
+{
+	message: `recording`
 }

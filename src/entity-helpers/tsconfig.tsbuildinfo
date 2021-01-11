@@ -221,6 +221,11 @@
         "signature": "1953de25dfa1608f82e8e0c9b08437de2dbc72b0f51668ac32e0c2e711d9aa34",
         "affectsGlobalScope": false
       },
+      "./recordingEntity.ts": {
+        "version": "6081a818d67f6e7a76518351df07a0bfb62fd0a36e8048d15dde3c820c44f42f",
+        "signature": "15221f7d474b7cffacdfce6eb75ad2e01b51e42ee4e7980ea6a4bc8fdbe3e502",
+        "affectsGlobalScope": false
+      },
       "../../node_modules/@types/node/globals.d.ts": {
         "version": "215d8d9a2c480fd460127edc048d68d9931d3b27f95132253a6e71975f060bb1",
         "signature": "215d8d9a2c480fd460127edc048d68d9931d3b27f95132253a6e71975f060bb1",
@@ -727,6 +732,9 @@
         "../../node_modules/@types/node/http.d.ts",
         "../../node_modules/@types/node/index.d.ts",
         "../../node_modules/@types/node/stream.d.ts"
+      ],
+      "./recordingEntity.ts": [
+        "./entity.ts"
       ]
     },
     "exportedModulesMap": {
@@ -920,6 +928,9 @@
         "../../node_modules/@types/node/http.d.ts",
         "../../node_modules/@types/node/index.d.ts",
         "../../node_modules/@types/node/stream.d.ts"
+      ],
+      "./recordingEntity.ts": [
+        "./entity.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -1022,7 +1033,8 @@
       "../../node_modules/typescript/lib/lib.esnext.promise.d.ts",
       "../../node_modules/typescript/lib/lib.esnext.string.d.ts",
       "../../node_modules/typescript/lib/lib.esnext.weakref.d.ts",
-      "./entity.ts"
+      "./entity.ts",
+      "./recordingEntity.ts"
     ]
   },
   "version": "4.1.3"

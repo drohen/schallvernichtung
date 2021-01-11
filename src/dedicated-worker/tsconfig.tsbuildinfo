@@ -221,29 +221,19 @@
         "signature": "1e4c714f3a2587ae6c1ce7f7e5f8670c4384835c123b7cca2cba5b480c9ad1e0",
         "affectsGlobalScope": true
       },
-      "../../build/_dist_/recordBuff.d.ts": {
-        "version": "4af2326af7a0732cfe8d62654342230f61c1eecb1905d54bd842d4215414a4c2",
-        "signature": "4af2326af7a0732cfe8d62654342230f61c1eecb1905d54bd842d4215414a4c2",
-        "affectsGlobalScope": false
-      },
       "../../build/_dist_/entity.d.ts": {
         "version": "1953de25dfa1608f82e8e0c9b08437de2dbc72b0f51668ac32e0c2e711d9aa34",
         "signature": "1953de25dfa1608f82e8e0c9b08437de2dbc72b0f51668ac32e0c2e711d9aa34",
         "affectsGlobalScope": false
       },
       "../../build/_dist_/recordingEntity.d.ts": {
-        "version": "8bd17042bc23fd5d49a6f95f3833f1eecb298ff1cfa360948280c1610ad0e6ec",
-        "signature": "8bd17042bc23fd5d49a6f95f3833f1eecb298ff1cfa360948280c1610ad0e6ec",
-        "affectsGlobalScope": false
-      },
-      "../../build/_dist_/recordingWorklet.d.ts": {
-        "version": "caea401ff9657c7ac5394ae00952bd7f6c754909b6cbbe70785d1c8ea8efc44c",
-        "signature": "caea401ff9657c7ac5394ae00952bd7f6c754909b6cbbe70785d1c8ea8efc44c",
+        "version": "15221f7d474b7cffacdfce6eb75ad2e01b51e42ee4e7980ea6a4bc8fdbe3e502",
+        "signature": "15221f7d474b7cffacdfce6eb75ad2e01b51e42ee4e7980ea6a4bc8fdbe3e502",
         "affectsGlobalScope": false
       },
       "./recordWorker.ts": {
-        "version": "81796c49414b38deaf04ae626075bd48e412aecb1dc591d2d81eec2d5467df89",
-        "signature": "6192ff73ba0861ab6274a667222c88cda94e78e9c9aa4225adb3b27b84da5cae",
+        "version": "a7915b53f5d4b324b14a0c90613248865fc25e33765b6a41dce4d493febf5a97",
+        "signature": "a3869bce8b691c26e05b6e99bc636531f4448cbb6a4a19d076884e23e7b42ead",
         "affectsGlobalScope": false
       },
       "../../node_modules/@types/node/globals.d.ts": {
@@ -558,18 +548,13 @@
       "rootDir": "./",
       "rootDirs": [
         "./",
-        "../recording-helpers",
-        "../audio-worklet"
+        "../entity-helpers"
       ],
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
       "../../build/_dist_/recordingEntity.d.ts": [
-        "../../build/_dist_/entity.d.ts",
-        "../../build/_dist_/recordBuff.d.ts"
-      ],
-      "../../build/_dist_/recordingWorklet.d.ts": [
-        "../../build/_dist_/recordBuff.d.ts"
+        "../../build/_dist_/entity.d.ts"
       ],
       "../../node_modules/@types/cacheable-request/index.d.ts": [
         "../../node_modules/@types/http-cache-semantics/index.d.ts",
@@ -763,18 +748,12 @@
         "../../node_modules/@types/node/stream.d.ts"
       ],
       "./recordWorker.ts": [
-        "../../build/_dist_/recordBuff.d.ts",
-        "../../build/_dist_/recordingEntity.d.ts",
-        "../../build/_dist_/recordingWorklet.d.ts"
+        "../../build/_dist_/recordingEntity.d.ts"
       ]
     },
     "exportedModulesMap": {
       "../../build/_dist_/recordingEntity.d.ts": [
-        "../../build/_dist_/entity.d.ts",
-        "../../build/_dist_/recordBuff.d.ts"
-      ],
-      "../../build/_dist_/recordingWorklet.d.ts": [
-        "../../build/_dist_/recordBuff.d.ts"
+        "../../build/_dist_/entity.d.ts"
       ],
       "../../node_modules/@types/cacheable-request/index.d.ts": [
         "../../node_modules/@types/http-cache-semantics/index.d.ts",
@@ -970,9 +949,7 @@
     },
     "semanticDiagnosticsPerFile": [
       "../../build/_dist_/entity.d.ts",
-      "../../build/_dist_/recordBuff.d.ts",
       "../../build/_dist_/recordingEntity.d.ts",
-      "../../build/_dist_/recordingWorklet.d.ts",
       "../../node_modules/@types/cacheable-request/index.d.ts",
       "../../node_modules/@types/cheerio/index.d.ts",
       "../../node_modules/@types/estree/index.d.ts",

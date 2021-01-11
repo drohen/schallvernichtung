@@ -5,7 +5,7 @@
       "imports": []
     },
     "_dist_/recordingEntity.js": {
-      "bytes": 558,
+      "bytes": 617,
       "imports": []
     },
     "_dist_/uiButton.js": {
@@ -17,7 +17,7 @@
       ]
     },
     "_dist_/recordBtn.js": {
-      "bytes": 2492,
+      "bytes": 2874,
       "imports": [
         {
           "path": "_dist_/recordingEntity.js"
@@ -27,9 +27,16 @@
         }
       ]
     },
+    "__snowpack__/env.js": {
+      "bytes": 73,
+      "imports": []
+    },
     "_dist_/recordingHandler.js": {
-      "bytes": 4124,
+      "bytes": 5782,
       "imports": [
+        {
+          "path": "__snowpack__/env.js"
+        },
         {
           "path": "_dist_/recordingEntity.js"
         }
@@ -137,7 +144,7 @@
       ]
     },
     "_dist_/schallvernichtung.js": {
-      "bytes": 2629,
+      "bytes": 2800,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -171,16 +178,19 @@
           "bytesInOutput": 5376
         },
         "_dist_/recordingEntity.js": {
-          "bytesInOutput": 223
+          "bytesInOutput": 244
         },
         "_dist_/uiButton.js": {
           "bytesInOutput": 1728
         },
         "_dist_/recordBtn.js": {
-          "bytesInOutput": 1427
+          "bytesInOutput": 1672
+        },
+        "__snowpack__/env.js": {
+          "bytesInOutput": 56
         },
         "_dist_/recordingHandler.js": {
-          "bytesInOutput": 2463
+          "bytesInOutput": 3518
         },
         "_dist_/sampleBank.js": {
           "bytesInOutput": 1093
@@ -216,10 +226,10 @@
           "bytesInOutput": 1425
         },
         "_dist_/schallvernichtung.js": {
-          "bytesInOutput": 1466
+          "bytesInOutput": 1603
         }
       },
-      "bytes": 20514
+      "bytes": 22028
     }
   }
 }

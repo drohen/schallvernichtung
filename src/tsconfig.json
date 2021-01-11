@@ -10,12 +10,6 @@
 		},
 		{
 			"path": "./main"
-		},
-		{
-			"path": "./audio-worklet"
-		},
-		{
-			"path": "./recording-helpers"
 		}
 	]
 }

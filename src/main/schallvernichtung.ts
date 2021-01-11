@@ -53,7 +53,7 @@ implements
 
 		this.entities = []
 
-		this.recordingHandler = new RecordingHandler( this, `123.js`, chunkSize, recordLength )
+		this.recordingHandler = new RecordingHandler( this, `/_dist_/recordWorker.js`, chunkSize, recordLength )
 
 		this.recordBtn = new RecordBtn( `${this.entities.length}`, this.recordingHandler, recordLength )
 
@@ -185,5 +185,15 @@ implements
 		if ( previous !== undefined ) this.sampleBlocks[ previous ].hide()
 
 		this.sampleBlocks[ index ].show()
+	}
+
+	public getRecorderInputNode(): AudioNode
+	{
+		if ( !this.sourceNode )
+		{
+			throw Error( `No source node available for recording` )
+		}
+
+		return this.sourceNode
 	}
 }

@@ -6,7 +6,7 @@
 			"dom"
 		],
 		"rootDir": ".",
-		"rootDirs": ["../main", "../dedicated-worker", "../entity-helpers", "../recording-helpers"],
+		"rootDirs": ["../main", "../dedicated-worker", "../entity-helpers"],
 		"composite": true
 	},
 	"references": [
@@ -15,9 +15,6 @@
 		},
 		{
 			"path": "../entity-helpers"
-		},
-		{
-			"path": "../recording-helpers"
 		}
 	],
 	"includes": ["."]
