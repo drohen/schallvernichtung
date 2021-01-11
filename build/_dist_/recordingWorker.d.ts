@@ -11,7 +11,9 @@ export declare class RecordBuffer {
     private bufferSize;
     private buffer;
     private prepCounter;
+    private emptyBuffer;
     constructor(sampleRate: number, maxLength: number, chunkSize: number, handler: RecordedBufferHandler);
+    private joinEnds;
     record(): void;
     onChunk(chunk: Float32Array): void;
     stopRecord(): void;
@@ -30,4 +32,4 @@ export declare class RecordingWorklet extends AudioWorkletProcessor implements R
      */
     process(inputs: Float32Array[][]): boolean;
 }
-//# sourceMappingURL=recordWorker.d.ts.map
+//# sourceMappingURL=recordingWorker.d.ts.map

@@ -53,7 +53,7 @@ implements
 
 		this.entities = []
 
-		this.recordingHandler = new RecordingHandler( this, `/_dist_/recordWorker.js`, chunkSize, recordLength )
+		this.recordingHandler = new RecordingHandler( this, `/_dist_/recordingWorker.js`, chunkSize, recordLength )
 
 		this.recordBtn = new RecordBtn( `${this.entities.length}`, this.recordingHandler, recordLength )
 

@@ -18,7 +18,6 @@ export declare class SampleBank {
     private channels;
     private samples;
     constructor(core: SampleCoreProvider, channels: number);
-    private joinEnds;
     create(data: Float32Array): void;
     play(index: number): void;
     pause(index: number): void;

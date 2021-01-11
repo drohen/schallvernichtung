@@ -22,7 +22,16 @@ export class RecordBuffer {
     this.recordingLength = 0;
     this.buffer = new Float32Array(this.bufferSize);
     this.onChunk = this.onChunk.bind(this);
+    this.emptyBuffer = new Float32Array(0);
     this.prepCounter = 0;
+  }
+  joinEnds(data) {
+    const milli = ~~(this.sampleRate * 0.1);
+    for (let i = 0; i < milli; i++) {
+      const dub = data[this.recordingLength - milli + i];
+      data[i] = data[i] * i / milli + (dub - dub * i / milli);
+    }
+    return data.subarray(0, this.recordingLength - milli);
   }
   record() {
     if (this.isRecording())
@@ -51,7 +60,11 @@ export class RecordBuffer {
       return;
     this.state = 2;
     this.recordingLength -= this.chunkSize;
-    this.handler.onRecorded(this.buffer.subarray(0, this.recordingLength));
+    if (this.recordingLength < this.sampleRate * 0.2) {
+      this.handler.onRecorded(this.emptyBuffer);
+      return;
+    }
+    this.handler.onRecorded(this.joinEnds(this.buffer));
   }
   isRecording() {
     return this.state === 1 || this.state === 0;

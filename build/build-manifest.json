@@ -43,7 +43,7 @@
       ]
     },
     "_dist_/sampleBank.js": {
-      "bytes": 1808,
+      "bytes": 1619,
       "imports": []
     },
     "_dist_/sampleSelect.js": {
@@ -144,7 +144,7 @@
       ]
     },
     "_dist_/schallvernichtung.js": {
-      "bytes": 2800,
+      "bytes": 2803,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -193,7 +193,7 @@
           "bytesInOutput": 3518
         },
         "_dist_/sampleBank.js": {
-          "bytesInOutput": 1093
+          "bytesInOutput": 1002
         },
         "_dist_/sampleSelect.js": {
           "bytesInOutput": 574
@@ -226,10 +226,10 @@
           "bytesInOutput": 1425
         },
         "_dist_/schallvernichtung.js": {
-          "bytesInOutput": 1603
+          "bytesInOutput": 1606
         }
       },
-      "bytes": 22028
+      "bytes": 21940
     }
   }
 }

@@ -39,6 +39,8 @@ export class RecordBuffer
 
 	private prepCounter: number
 
+	private emptyBuffer: Float32Array
+
 	constructor(
 		private sampleRate: number,
 		private maxLength: number,
@@ -56,7 +58,23 @@ export class RecordBuffer
 
 		this.onChunk = this.onChunk.bind( this )
 
+		this.emptyBuffer = new Float32Array( 0 )
+
 		this.prepCounter = 0
+	}
+
+	private joinEnds( data: Float32Array )
+	{
+		const milli = ~~( this.sampleRate * 0.1 )
+
+		for( let i = 0; i < milli; i++ )
+		{
+			const dub = data[ this.recordingLength - milli + i ]
+
+			data[ i ] = ( data[ i ] * i / milli ) + ( dub - ( dub * i / milli ) )
+		}
+
+		return data.subarray( 0, this.recordingLength - milli )
 	}
 
 	public record(): void
@@ -104,7 +122,14 @@ export class RecordBuffer
 
 		this.recordingLength -= this.chunkSize
 
-		this.handler.onRecorded( this.buffer.subarray( 0, this.recordingLength ) )
+		if ( this.recordingLength < this.sampleRate * 0.2 )
+		{
+			this.handler.onRecorded( this.emptyBuffer )
+
+			return 
+		}
+
+		this.handler.onRecorded( this.joinEnds( this.buffer ) )
 	}
 
 	public isRecording(): boolean

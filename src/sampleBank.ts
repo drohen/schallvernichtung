@@ -34,22 +34,10 @@ export class SampleBank
 		this.samples = []
 	}
 
-	private joinEnds( data: Float32Array )
-	{
-		const milli = ~~( this.core.context.sampleRate * 0.05 )
-
-		for( let i = 0; i < milli; i++ )
-		{
-			data[ i ] = data[ i ] * i / milli
-
-			data[ data.length - 1 - i ] = data[ data.length - 1 - i ] * i / milli
-		}
-	}
-
 	public create( data: Float32Array ): void
 	{
-		this.joinEnds( data )
-		
+		if ( data.length < this.core.context.sampleRate * 0.2 ) return
+
 		const buffer = this.core.context.createBuffer( this.channels, data.length, this.core.context.sampleRate )
 
 		const node = this.core.context.createBufferSource()
