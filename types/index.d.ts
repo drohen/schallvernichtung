@@ -1,3 +1,7 @@
+interface Window {
+	webkitAudioContext: typeof AudioContext
+}
+
 interface AudioWorkletProcessor 
 {
 	readonly port: MessagePort;
@@ -8,9 +12,9 @@ interface AudioWorkletProcessor
 	): boolean;
 }
 
-declare type AudioWorkletNodeOptions = any;
+// declare type AudioWorkletNodeOptions = any;
 
-declare type AudioParamDescriptor = any;
+// declare type AudioParamDescriptor = any;
 
 declare var AudioWorkletProcessor: {
 	prototype: AudioWorkletProcessor;
@@ -25,3 +29,5 @@ declare function registerProcessor(
 		parameterDescriptors?: AudioParamDescriptor[];
 	}
 ): undefined;
+
+declare function postMessage(workerMessage: any, transfer?: Transferable[]): void

@@ -1,17 +1,13 @@
 {
     "mount": {
         "public": "/",
-        "src/main": "/_dist_",
-        "src/audio-worklet": "/_dist_",
-        "src/dedicated-worker": "/_dist_",
-        "src/entity-helpers": "/_dist_",
-        "src/recording-helpers": "/_dist_"
+        "src": "/_dist_"
     },
     "plugins": [
         [
             "@snowpack/plugin-run-script",
             {
-                "cmd": "tsc --build src",
+                "cmd": "tsc --build tsconfig.json",
                 "watch": "$1 --watch"
             }
         ]
@@ -31,8 +27,6 @@
         "**/node_modules/**/*",
         "**/web_modules/**/*",
         "**/types/**/*",
-        "**/tsconfig.json",
-        "**/tsconfig-base.json",
-        "**/tsconfig.tsbuildinfo"
+        "**/tsconfig.json"
     ]
 }
