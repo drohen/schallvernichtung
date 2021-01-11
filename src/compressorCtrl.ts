@@ -1,7 +1,7 @@
-import { RangeCoreProvider, RangeNodeUI } from "./rangeNodeUI"
+import { RangeCoreProvider, UIRangeNode } from "./uiRangeNode"
 
 
-export class CompressorControl extends RangeNodeUI
+export class CompressorControl extends UIRangeNode
 {
 	private node: DynamicsCompressorNode
 

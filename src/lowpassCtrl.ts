@@ -1,6 +1,6 @@
-import { RangeNodeUI, RangeCoreProvider } from "./rangeNodeUI"
+import { UIRangeNode, RangeCoreProvider } from "./uiRangeNode"
 
-export class LowpassControl extends RangeNodeUI
+export class LowpassControl extends UIRangeNode
 {
 	private node: BiquadFilterNode
 

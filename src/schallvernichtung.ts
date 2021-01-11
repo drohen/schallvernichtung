@@ -1,16 +1,16 @@
+import type { Entity } from "./entity"
 import { el, mount, RedomComponent, setChildren } from "redom"
-import { RecordBtn, RecordHandler } from "./recordBtn"
-import { RecordBuffer, RecordedBufferHandler } from "./recordBuff"
+import { RecordBtn } from "./recordBtn"
+import { RecordingHandler, RecordingSystemCoreProvider } from "./recordingHandler"
 import { SampleBank, SampleCoreProvider } from "./sampleBank"
 import { SampleSelect, SampleSelectHandler } from "./sampleSelect"
 import { SampleUI } from "./sampleUI"
 
 export class Schallvernichtung 
-implements 
-	RecordHandler,
-	RecordedBufferHandler, 
+implements
 	SampleCoreProvider,
-	SampleSelectHandler
+	SampleSelectHandler,
+	RecordingSystemCoreProvider
 {
 	private baseEl: HTMLElement
 
@@ -20,9 +20,7 @@ implements
 
 	private sourceNode?: MediaStreamAudioSourceNode
 
-	private processorNode: ScriptProcessorNode
-
-	private recordBuff: RecordBuffer
+	private recordingHandler: RecordingHandler
 
 	private sampleBlocks: SampleUI[]
 
@@ -31,6 +29,8 @@ implements
 	private samplesMount: HTMLElement
 
 	private sampleList: SampleSelect
+	
+	public entities: Entity[]
 
 	public static init(): void
 	{
@@ -51,15 +51,13 @@ implements
 
 		const chunkSize = 4096
 
-		this.recordBtn = new RecordBtn( this, recordLength )
+		this.entities = []
 
-		this.recordBuff = new RecordBuffer( this.context.sampleRate, recordLength, chunkSize, this )
+		this.recordingHandler = new RecordingHandler( this, `/_dist_/recordingWorker.js`, chunkSize, recordLength )
 
-		this.processorNode = this.context.createScriptProcessor( chunkSize, 1, 1 )
+		this.recordBtn = new RecordBtn( `${this.entities.length}`, this.recordingHandler, recordLength )
 
-		this.processChunk = this.processChunk.bind( this )
-
-		this.processorNode.addEventListener( `audioprocess`, this.processChunk )
+		this.entities.push( this.recordBtn )
 
 		this.sampleBank = new SampleBank( this, 1 )
 
@@ -114,14 +112,6 @@ implements
 		mount( this.baseEl, this.sampleList )
 	}
 
-	private processChunk( event: AudioProcessingEvent )
-	{
-		if ( this.recordBuff.isRecording() )
-		{
-			this.recordBuff.onChunk( event.inputBuffer.getChannelData( 0 ) )
-		}
-	}
-
 	public onRecorded( data: Float32Array ): void
 	{
 		this.sampleBank.create( data )
@@ -138,25 +128,25 @@ implements
 	{
 		this.context.suspend()
 
-		console.error( this.recordBtn.getError() )
+		// console.error( this.recordBtn.getError() )
 	}
 
 	public async startRecording(): Promise<void>
 	{
-		this.sourceNode?.connect( this.processorNode )
+		// this.sourceNode?.connect( this.processorNode )
 
-		this.processorNode.connect( this.context.destination )
+		// this.processorNode.connect( this.context.destination )
 
-		this.recordBuff.record()
+		// this.recordBuff.record()
 	}
 
 	public async stopRecording(): Promise<void>
 	{
-		this.recordBuff.stopRecord()
+		// this.recordBuff.stopRecord()
 
-		this.processorNode.disconnect( this.context.destination )
+		// this.processorNode.disconnect( this.context.destination )
 
-		this.sourceNode?.disconnect( this.processorNode )
+		// this.sourceNode?.disconnect( this.processorNode )
 	}
 
 	public async reloadContext(): Promise<void>
@@ -195,5 +185,15 @@ implements
 		if ( previous !== undefined ) this.sampleBlocks[ previous ].hide()
 
 		this.sampleBlocks[ index ].show()
+	}
+
+	public getRecorderInputNode(): AudioNode
+	{
+		if ( !this.sourceNode )
+		{
+			throw Error( `No source node available for recording` )
+		}
+
+		return this.sourceNode
 	}
 }

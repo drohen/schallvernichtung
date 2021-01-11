@@ -1,5 +1,5 @@
-import { RangeNodeUI, RangeCoreProvider } from "./rangeNodeUI";
-export declare class DistortionControl extends RangeNodeUI {
+import { UIRangeNode, RangeCoreProvider } from "./uiRangeNode";
+export declare class DistortionControl extends UIRangeNode {
     private curveData;
     private node;
     constructor(core: RangeCoreProvider);

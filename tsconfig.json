@@ -28,13 +28,12 @@
 		"declaration": true,
 		"emitDeclarationOnly": true,
 		"declarationMap": true,
-		"declarationDir": "build/_dist_"
+		"declarationDir": "build/_dist_",
+		"lib": [
+			"esnext",
+			"dom"
+		]
 	},
-	"include": [
-		"src",
-		"types"
-	],
-	"exclude": [
-		"node_modules"
-	]
+	"include": ["src", "types"],
+	"exclude": ["node_modules", "build", "public"]
 }

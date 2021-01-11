@@ -3,7 +3,7 @@ import { AudioNodeExtension } from "./audioNodeExt";
 export interface RangeCoreProvider {
     context: AudioContext;
 }
-export declare class RangeNodeUI extends AudioNodeExtension implements RedomComponent {
+export declare class UIRangeNode extends AudioNodeExtension implements RedomComponent {
     protected core: RangeCoreProvider;
     el: HTMLInputElement;
     private debounce;
@@ -14,4 +14,4 @@ export declare class RangeNodeUI extends AudioNodeExtension implements RedomComp
     protected onChange(value: number): void;
     protected ramp(param: AudioParam, to: number): void;
 }
-//# sourceMappingURL=rangeNodeUI.d.ts.map
+//# sourceMappingURL=uiRangeNode.d.ts.map

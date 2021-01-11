@@ -22,5 +22,11 @@
 	},
     "installOptions": {
         "installTypes": true
-    }
+    },
+    "exclude": [
+        "**/node_modules/**/*",
+        "**/web_modules/**/*",
+        "**/types/**/*",
+        "**/tsconfig.json"
+    ]
 }

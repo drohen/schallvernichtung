@@ -1,5 +1,5 @@
-import { RangeNodeUI, RangeCoreProvider } from "./rangeNodeUI";
-export declare class SpeedControl extends RangeNodeUI {
+import { UIRangeNode, RangeCoreProvider } from "./uiRangeNode";
+export declare class SpeedControl extends UIRangeNode {
     private node;
     constructor(core: RangeCoreProvider, node: AudioBufferSourceNode);
     protected onChange(value: number): void;

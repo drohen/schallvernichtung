@@ -1,6 +1,6 @@
-import { RangeNodeUI, RangeCoreProvider } from "./rangeNodeUI"
+import { UIRangeNode, RangeCoreProvider } from "./uiRangeNode"
 
-export class VolumeControl extends RangeNodeUI
+export class VolumeControl extends UIRangeNode
 {
 	private node: GainNode
 

@@ -1,6 +1,6 @@
-import { RangeNodeUI, RangeCoreProvider } from "./rangeNodeUI"
+import { UIRangeNode, RangeCoreProvider } from "./uiRangeNode"
 
-export class DistortionControl extends RangeNodeUI
+export class DistortionControl extends UIRangeNode
 {
 	private curveData: Float32Array
 

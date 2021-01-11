@@ -4,20 +4,46 @@
       "bytes": 12711,
       "imports": []
     },
-    "_dist_/recordBtn.js": {
-      "bytes": 3914,
+    "_dist_/recordingEntity.js": {
+      "bytes": 617,
+      "imports": []
+    },
+    "_dist_/uiButton.js": {
+      "bytes": 2529,
       "imports": [
         {
           "path": "web_modules/redom.js"
         }
       ]
     },
-    "_dist_/recordBuff.js": {
-      "bytes": 1475,
+    "_dist_/recordBtn.js": {
+      "bytes": 2874,
+      "imports": [
+        {
+          "path": "_dist_/recordingEntity.js"
+        },
+        {
+          "path": "_dist_/uiButton.js"
+        }
+      ]
+    },
+    "__snowpack__/env.js": {
+      "bytes": 73,
       "imports": []
     },
+    "_dist_/recordingHandler.js": {
+      "bytes": 5782,
+      "imports": [
+        {
+          "path": "__snowpack__/env.js"
+        },
+        {
+          "path": "_dist_/recordingEntity.js"
+        }
+      ]
+    },
     "_dist_/sampleBank.js": {
-      "bytes": 1808,
+      "bytes": 1619,
       "imports": []
     },
     "_dist_/sampleSelect.js": {
@@ -32,7 +58,7 @@
       "bytes": 1462,
       "imports": []
     },
-    "_dist_/rangeNodeUI.js": {
+    "_dist_/uiRangeNode.js": {
       "bytes": 1766,
       "imports": [
         {
@@ -47,7 +73,7 @@
       "bytes": 1153,
       "imports": [
         {
-          "path": "_dist_/rangeNodeUI.js"
+          "path": "_dist_/uiRangeNode.js"
         }
       ]
     },
@@ -55,7 +81,7 @@
       "bytes": 866,
       "imports": [
         {
-          "path": "_dist_/rangeNodeUI.js"
+          "path": "_dist_/uiRangeNode.js"
         }
       ]
     },
@@ -63,7 +89,7 @@
       "bytes": 448,
       "imports": [
         {
-          "path": "_dist_/rangeNodeUI.js"
+          "path": "_dist_/uiRangeNode.js"
         }
       ]
     },
@@ -79,7 +105,7 @@
       "bytes": 387,
       "imports": [
         {
-          "path": "_dist_/rangeNodeUI.js"
+          "path": "_dist_/uiRangeNode.js"
         }
       ]
     },
@@ -87,7 +113,7 @@
       "bytes": 440,
       "imports": [
         {
-          "path": "_dist_/rangeNodeUI.js"
+          "path": "_dist_/uiRangeNode.js"
         }
       ]
     },
@@ -118,7 +144,7 @@
       ]
     },
     "_dist_/schallvernichtung.js": {
-      "bytes": 3199,
+      "bytes": 2803,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -127,7 +153,7 @@
           "path": "_dist_/recordBtn.js"
         },
         {
-          "path": "_dist_/recordBuff.js"
+          "path": "_dist_/recordingHandler.js"
         },
         {
           "path": "_dist_/sampleBank.js"
@@ -151,14 +177,23 @@
         "web_modules/redom.js": {
           "bytesInOutput": 5376
         },
-        "_dist_/recordBtn.js": {
-          "bytesInOutput": 2710
+        "_dist_/recordingEntity.js": {
+          "bytesInOutput": 244
         },
-        "_dist_/recordBuff.js": {
-          "bytesInOutput": 885
+        "_dist_/uiButton.js": {
+          "bytesInOutput": 1728
+        },
+        "_dist_/recordBtn.js": {
+          "bytesInOutput": 1672
+        },
+        "__snowpack__/env.js": {
+          "bytesInOutput": 56
+        },
+        "_dist_/recordingHandler.js": {
+          "bytesInOutput": 3518
         },
         "_dist_/sampleBank.js": {
-          "bytesInOutput": 1090
+          "bytesInOutput": 1002
         },
         "_dist_/sampleSelect.js": {
           "bytesInOutput": 574
@@ -166,7 +201,7 @@
         "_dist_/audioNodeExt.js": {
           "bytesInOutput": 930
         },
-        "_dist_/rangeNodeUI.js": {
+        "_dist_/uiRangeNode.js": {
           "bytesInOutput": 962
         },
         "_dist_/compressorCtrl.js": {
@@ -191,10 +226,10 @@
           "bytesInOutput": 1425
         },
         "_dist_/schallvernichtung.js": {
-          "bytesInOutput": 1957
+          "bytesInOutput": 1606
         }
       },
-      "bytes": 18756
+      "bytes": 21940
     }
   }
 }

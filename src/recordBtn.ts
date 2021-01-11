@@ -1,235 +1,179 @@
-import { el, RedomComponent } from "redom"
+import type { Entity } from "./entity"
+import type { RedomComponent } from "redom"
+import { RecordingEntity, RecordingState } from "./recordingEntity"
+import { ButtonInteractionHandler, UIButton } from "./uiButton"
 
-enum RecordingState
+export interface RecordButtonHandler
 {
-	noDevice,
-	requestingDevice,
-	idle,
-	starting,
-	recording,
-	closing,
-	error
+	recordButtonOnStart: () => void
+
+	recordButtonOnStop: () => void
+
+	recordButtonOnReload: () => void
+
+	recordButtonOnRequest: () => void
 }
 
-export interface RecordHandler
+enum ButtonState
 {
-	/**
-	 * Handle stream then return promise so the button
-	 * can update its state to handle recording button
-	 * click to start recording
-	 */
-	handleStream: ( stream: MediaStream ) => Promise<void>
-
-	onError: () => void
-
-	startRecording: () => Promise<void>
-
-	stopRecording: () => Promise<void>
-
-	reloadContext: () => Promise<void>
+	error = `Reload context`,
+	noDevice = `Enable input device`,
+	requestingDevice = `Loading...`,
+	idle = `Hold down to record`,
+	stopRecording = `Stopping...`,
+	recording = `Release to stop recording`,
+	startRecording = `Starting...`
 }
 
-export class RecordBtn implements RedomComponent
+export class RecordBtn implements RedomComponent, RecordingEntity, ButtonInteractionHandler, Entity
 {
-	public el: HTMLButtonElement
+	public el: UIButton
 
-	private state: RecordingState
-
-	private error?: Error
-
-	private mediaTracks: MediaStreamTrack[]
+	public isRecordingEntity: true
 
 	private recordingTimeout: number
 
 	constructor(
-		private handler: RecordHandler,
+		public id: string,
+		private handler: RecordButtonHandler,
 		private recordLength: number
 	)
 	{
-		this.el = el( `button`, `Enable input device` )
+		this.el = new UIButton(
+			this,
+			Object.values( ButtonState ).reduce( ( obj, val ) => Object.assign( obj, { [ val ]: val } ), {} ),
+			ButtonState.noDevice
+		)
 
-		this.recordBtnEvent = this.recordBtnEvent.bind( this )
-
-		this.recordBtnDown = this.recordBtnDown.bind( this )
-
-		this.recordBtnUp = this.recordBtnUp.bind( this )
+		this.isRecordingEntity = true
 
 		this.stopRecording = this.stopRecording.bind( this )
 
-		this.setError = this.setError.bind( this )
+		this.onDown = this.onDown.bind( this )
 
-		this.setRecordingReady = this.setRecordingReady.bind( this )
+		this.onUp = this.onUp.bind( this )
 
-		this.el.addEventListener( `click`, this.recordBtnEvent )
+		this.onLeave = this.onLeave.bind( this )
 
-		this.state = RecordingState.noDevice
-
-		this.mediaTracks = []
+		this.onClick = this.onClick.bind( this )
 
 		this.recordingTimeout = 0
-	}
-
-	private reset()
-	{
-		this.error = undefined
-
-		this.state = RecordingState.noDevice
-
-		this.el.removeEventListener( `mousedown`, this.recordBtnDown )
-
-		this.el.removeEventListener( `touchstart`, this.recordBtnDown )
-
-		this.el.removeEventListener( `mouseup`, this.recordBtnUp )
-
-		this.el.removeEventListener( `mouseleave`, this.recordBtnUp )
-
-		this.el.removeEventListener( `touchend`, this.recordBtnUp )
-
-		this.handler.reloadContext()
-	}
-
-	private setError( error: Error )
-	{
-		this.state = RecordingState.error
-
-		this.error = error
-
-		this.enable( `Reload context` )
-
-		this.mediaTracks.forEach( track => track.stop() )
-
-		this.mediaTracks.length = 0
-
-		this.handler.onError()
-	}
-
-	private setRecordingReady()
-	{
-		this.state = RecordingState.idle
-
-		this.enable( `Hold down to record` )
-	}
-
-	private requestDevice()
-	{
-		navigator.mediaDevices
-			.getUserMedia( {
-				audio: {
-					autoGainControl: false,
-					echoCancellation: false,
-					noiseSuppression: false
-				},
-				video: false
-			} )
-			.then( stream =>
-			{
-				this.mediaTracks.push( ...stream.getAudioTracks() )
-
-				return this.handler.handleStream( stream )
-			} )
-			.then( this.setRecordingReady )
-			.catch( this.setError )
-	}
-
-	private disable( text: string )
-	{
-		this.el.textContent = text
-
-		this.el.disabled = true
-	}
-
-	private enable( text: string )
-	{
-		this.el.textContent = text
-
-		this.el.disabled = false
 	}
 
 	private stopRecording()
 	{
 		clearTimeout( this.recordingTimeout )
 
-		if ( this.state !== RecordingState.recording ) return
-
-		this.state = RecordingState.closing
-
-		this.disable( `Stopping...` )
-
-		this.handler.stopRecording()
-			.then( this.setRecordingReady )
-			.catch( this.setError )
+		this.handler.recordButtonOnStop()
 	}
 
-	private recordBtnDown( event: Event )
+	public onDown( state: string ): void
 	{
-		event.preventDefault()
+		if ( state !== ButtonState.idle ) return
 
-		event.stopPropagation()
-
-		if ( this.state === RecordingState.idle )
-		{
-			this.state = RecordingState.starting
-
-			this.disable( `Starting...` )
-
-			this.handler.startRecording()
-				.then( () =>
-				{
-					this.enable( `Release to stop recording` )
-
-					this.state = RecordingState.recording
-
-					this.recordingTimeout = window.setTimeout( 
-						this.stopRecording,
-						this.recordLength * 1000 )
-				} )
-				.catch( this.setError )
-		}
+		this.handler.recordButtonOnStart()
 	}
 
-	private recordBtnUp( event: Event )
+	public onUp( state: string ): void
 	{
-		event.preventDefault()
-
-		event.stopPropagation()
+		if ( state !== ButtonState.recording ) return
 
 		this.stopRecording()
 	}
 
-	private recordBtnEvent()
+	public onLeave( state: string ): void
 	{
-		switch( this.state )
+		if ( state !== ButtonState.recording ) return
+
+		this.stopRecording()
+	}
+
+	public onClick( state: string ): void
+	{
+		switch ( state )
 		{
+			case ButtonState.error:
+
+				this.handler.recordButtonOnReload()
+
+				break
+
+			case ButtonState.noDevice:
+				
+				this.handler.recordButtonOnRequest()
+
+				break
+
+			default:
+				// do nothing
+				break
+		}
+	}
+
+	public onRecordingStateChanged( state: RecordingState ): void
+	{
+		switch( state )
+		{
+			case RecordingState.starting:
+
+				this.el.disable()
+
+				this.el.setState( ButtonState.startRecording )
+
+				break
+
+			case RecordingState.recording:
+
+				this.el.setState( ButtonState.recording )
+
+				this.el.enable()
+
+				this.recordingTimeout = window.setTimeout( 
+					this.stopRecording,
+					this.recordLength * 1000 )
+
+				break
+
+			case RecordingState.closing:
+
+				this.el.disable()
+
+				this.el.setState( ButtonState.stopRecording )
+		
+				break
+
+			case RecordingState.idle:
+
+				this.el.setState( ButtonState.idle )
+
+				this.el.enable()
+		
+				break
+
 			case RecordingState.noDevice:
 
-				this.state = RecordingState.requestingDevice
-
-				this.disable( `Loading...` )
-
-				this.requestDevice()
-
-				this.el.addEventListener( `mousedown`, this.recordBtnDown )
-
-				this.el.addEventListener( `touchstart`, this.recordBtnDown )
-
-				this.el.addEventListener( `mouseup`, this.recordBtnUp )
-
-				this.el.addEventListener( `mouseleave`, this.recordBtnUp )
-
-				this.el.addEventListener( `touchend`, this.recordBtnUp )
+				this.el.setState( ButtonState.noDevice )
 
 				break
 
 			case RecordingState.error:
+				
+				this.el.setState( ButtonState.error )
 
-				this.reset()
+				break
+
+			case RecordingState.requestingDevice:
+
+				this.el.disable()
+
+				this.el.setState( ButtonState.requestingDevice )
 
 				break
 		}
 	}
 
-	public getError(): Error | undefined
+	public onRecordingError(): void
 	{
-		return this.error
+		this.el.setState( ButtonState.error )
 	}
 }

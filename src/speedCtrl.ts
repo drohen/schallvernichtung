@@ -1,6 +1,6 @@
-import { RangeNodeUI, RangeCoreProvider } from "./rangeNodeUI"
+import { UIRangeNode, RangeCoreProvider } from "./uiRangeNode"
 
-export class SpeedControl extends RangeNodeUI
+export class SpeedControl extends UIRangeNode
 {
 	constructor(
 		core: RangeCoreProvider,

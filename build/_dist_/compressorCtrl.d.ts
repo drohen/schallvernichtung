@@ -1,5 +1,5 @@
-import { RangeCoreProvider, RangeNodeUI } from "./rangeNodeUI";
-export declare class CompressorControl extends RangeNodeUI {
+import { RangeCoreProvider, UIRangeNode } from "./uiRangeNode";
+export declare class CompressorControl extends UIRangeNode {
     private node;
     private gain;
     constructor(core: RangeCoreProvider);

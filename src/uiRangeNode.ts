@@ -6,7 +6,7 @@ export interface RangeCoreProvider
 	context: AudioContext
 }
 
-export class RangeNodeUI extends AudioNodeExtension implements RedomComponent
+export class UIRangeNode extends AudioNodeExtension implements RedomComponent
 {
 	public el: HTMLInputElement
 
