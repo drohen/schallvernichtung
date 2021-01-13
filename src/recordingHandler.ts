@@ -1,5 +1,5 @@
 import type { Entity } from "./entity"
-import type { RecordButtonHandler } from "./recordBtn"
+import type { UIRecordButtonHandler } from "./uiRecordBtn"
 import { 
 	RecordingEntity, 
 	RecordingState, 
@@ -12,6 +12,7 @@ import {
 	RecordingWorkerOutputReadyMessage,
 	RecordingWorkerOutputRecordingMessage
 } from "./recordingEntity"
+import type { AudioNodeManagerContext } from "./audioNodeExt"
 
 /**
  * Recording system will manage the APIs responsible
@@ -25,9 +26,16 @@ import {
  */
 export interface RecordingSystemCoreProvider
 {
-	context: AudioContext
+	entities: () => Entity[]
 
-	entities: Entity[]
+	onRecorded: ( buffer: Float32Array ) => void
+}
+
+export interface AudioContextProvider
+{
+	context: () => AudioContext
+	
+	getRecorderNode: () => AudioNodeManagerContext
 
 	/**
 	 * Handle stream then return promise so the button
@@ -35,10 +43,6 @@ export interface RecordingSystemCoreProvider
 	 * click to start recording
 	 */
 	handleStream: ( stream: MediaStream ) => Promise<void>
-
-	onRecorded: ( buffer: Float32Array ) => void
-
-	getRecorderInputNode: () => AudioNode
 }
 
 type WorkerMessage = 
@@ -53,7 +57,7 @@ type WorkerOutputMessage =
 	| RecordingWorkerOutputReadyMessage
 	| RecordingWorkerOutputRecordingMessage
 
-export class RecordingHandler implements RecordButtonHandler
+export class RecordingHandler implements UIRecordButtonHandler
 {
 	private recorderNode?: AudioWorkletNode | ScriptProcessorNode
 
@@ -65,6 +69,7 @@ export class RecordingHandler implements RecordButtonHandler
 
 	constructor(
 		private core: RecordingSystemCoreProvider,
+		private audio: AudioContextProvider,
 		private workerPath: string,
 		private chunkSize: number,
 		private recordLength: number
@@ -76,29 +81,29 @@ export class RecordingHandler implements RecordButtonHandler
 
 		this.handleRecorderMessage = this.handleRecorderMessage.bind( this )
 
-		if ( this.core.context.audioWorklet ) 
+		if ( this.audio.context().audioWorklet ) 
 		{
-			this.core.context.audioWorklet.addModule( this.workerPath )
+			this.audio.context().audioWorklet.addModule( this.workerPath )
 				.catch( error => this.emit( `error`, undefined, error ) )
 		}
 		else
 		{
-			this.recorderNode = this.core.context.createScriptProcessor( this.chunkSize, 1, 1 )
+			this.recorderNode = this.audio.context().createScriptProcessor( this.chunkSize, 1, 1 )
 
 			this.processChunk = this.processChunk.bind( this )
 
 			this.recorderNode.addEventListener( `audioprocess`, this.processChunk )
 
-			this.recorderNode.connect( this.core.context.destination )
+			this.recorderNode.connect( this.audio.context().destination )
 		}
 	}
 
 	private setRecorder()
 	{
-		if ( this.core.context.audioWorklet ) 
+		if ( this.audio.context().audioWorklet ) 
 		{
 			this.recorderNode = new AudioWorkletNode( 
-				this.core.context, 
+				this.audio.context(), 
 				`recording-worklet`, 
 				{ numberOfOutputs: 0, numberOfInputs: 1 } )
 
@@ -107,13 +112,15 @@ export class RecordingHandler implements RecordButtonHandler
 				throw Error( `No recording node available to connect` )
 			}
 	
-			this.core.getRecorderInputNode().connect( this.recorderNode )
+			this.audio.getRecorderNode().audioNodeManager.connectOutput( this.recorderNode )
 
 			this.recorder = this.recorderNode.port
 		}
 		else 
 		{
-			this.recorder = new Worker( new URL( this.workerPath, import.meta.url ), { name: `recording-worker`, type: `module` } )
+			this.recorder = new Worker( 
+				new URL( this.workerPath, import.meta.url ), 
+				{ name: `recording-worker`, type: `module` } )
 		}
 
 		this.recorder.onmessage = this.handleRecorderMessage
@@ -123,21 +130,21 @@ export class RecordingHandler implements RecordButtonHandler
 			data: {
 				chunkSize: this.chunkSize,
 				maxLength: this.recordLength,
-				sampleRate: this.core.context.sampleRate,
+				sampleRate: this.audio.context().sampleRate,
 			}
 		} )
 	}
 
 	private unsetRecorder()
 	{
-		if ( this.core.context.audioWorklet ) 
+		if ( this.audio.context().audioWorklet ) 
 		{
 			if ( !this.recorderNode )
 			{
 				throw Error( `No recording node available to disconnect` )
 			}
 	
-			this.core.getRecorderInputNode().disconnect( this.recorderNode )
+			this.audio.getRecorderNode().audioNodeManager.disconnectOutput( this.recorderNode )
 		}
 
 		this.recorder = undefined
@@ -267,11 +274,11 @@ export class RecordingHandler implements RecordButtonHandler
 
 	private emit( emitType: `state` | `error`, state?: RecordingState, error?: Error )
 	{
-		if ( ( emitType === `state` && state ) && !this.shiftState( state ) ) return
+		if ( ( emitType === `state` && state !== undefined ) && !this.shiftState( state ) ) return
 
-		for ( let i = 0; i < this.core.entities.length; i++ )
+		for ( let i = 0; i < this.core.entities().length; i++ )
 		{
-			const entity = this.core.entities[ i ]
+			const entity = this.core.entities()[ i ]
 
 			if ( this.isRecordingEntity( entity ) )
 			{
@@ -302,7 +309,7 @@ export class RecordingHandler implements RecordButtonHandler
 			{
 				this.mediaTracks.push( ...stream.getAudioTracks() )
 
-				return this.core.handleStream( stream )
+				return this.audio.handleStream( stream )
 			} )
 			.then( () => this.emit( `state`, RecordingState.idle ) )
 			.catch( ( error: Error ) => this.emit( `error`, undefined, error ) )

@@ -1,4 +1,10 @@
-import type { RecordingWorkerChunkMessage, RecordingWorkerCloseMessage, RecordingWorkerInitMessage, RecordingWorkerStartMessage, RecordingWorkerStopMessage } from "./recordingEntity"
+import type { 
+	RecordingWorkerChunkMessage, 
+	RecordingWorkerCloseMessage, 
+	RecordingWorkerInitMessage, 
+	RecordingWorkerStartMessage, 
+	RecordingWorkerStopMessage 
+} from "./recordingEntity"
 
 enum WorkletState
 {

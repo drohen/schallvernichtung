@@ -9,15 +9,15 @@
       "imports": []
     },
     "_dist_/uiButton.js": {
-      "bytes": 2529,
+      "bytes": 3621,
       "imports": [
         {
           "path": "web_modules/redom.js"
         }
       ]
     },
-    "_dist_/recordBtn.js": {
-      "bytes": 2874,
+    "_dist_/uiRecordBtn.js": {
+      "bytes": 2981,
       "imports": [
         {
           "path": "_dist_/recordingEntity.js"
@@ -32,7 +32,7 @@
       "imports": []
     },
     "_dist_/recordingHandler.js": {
-      "bytes": 5782,
+      "bytes": 5891,
       "imports": [
         {
           "path": "__snowpack__/env.js"
@@ -42,127 +42,125 @@
         }
       ]
     },
-    "_dist_/sampleBank.js": {
-      "bytes": 1619,
-      "imports": []
-    },
-    "_dist_/sampleSelect.js": {
-      "bytes": 889,
+    "_dist_/uiSampleSelect.js": {
+      "bytes": 1199,
       "imports": [
         {
           "path": "web_modules/redom.js"
         }
       ]
     },
-    "_dist_/audioNodeExt.js": {
-      "bytes": 1462,
+    "_dist_/sampleEntity.js": {
+      "bytes": 581,
       "imports": []
     },
+    "_dist_/uiSamplePlayBtn.js": {
+      "bytes": 911,
+      "imports": [
+        {
+          "path": "_dist_/sampleEntity.js"
+        },
+        {
+          "path": "_dist_/uiButton.js"
+        }
+      ]
+    },
     "_dist_/uiRangeNode.js": {
-      "bytes": 1766,
+      "bytes": 922,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        }
+      ]
+    },
+    "_dist_/uiSample.js": {
+      "bytes": 3011,
       "imports": [
         {
           "path": "web_modules/redom.js"
         },
+        {
+          "path": "_dist_/uiSamplePlayBtn.js"
+        },
+        {
+          "path": "_dist_/uiRangeNode.js"
+        },
+        {
+          "path": "_dist_/sampleEntity.js"
+        }
+      ]
+    },
+    "web_modules/nanoid.js": {
+      "bytes": 912,
+      "imports": []
+    },
+    "_dist_/sampleHandler.js": {
+      "bytes": 1188,
+      "imports": [
+        {
+          "path": "_dist_/sampleEntity.js"
+        }
+      ]
+    },
+    "_dist_/audioNodeExt.js": {
+      "bytes": 2664,
+      "imports": []
+    },
+    "_dist_/sampleNode.js": {
+      "bytes": 5117,
+      "imports": [
+        {
+          "path": "_dist_/audioNodeExt.js"
+        },
+        {
+          "path": "_dist_/sampleEntity.js"
+        }
+      ]
+    },
+    "_dist_/contextNode.js": {
+      "bytes": 790,
+      "imports": [
         {
           "path": "_dist_/audioNodeExt.js"
         }
       ]
     },
-    "_dist_/compressorCtrl.js": {
-      "bytes": 1153,
-      "imports": [
-        {
-          "path": "_dist_/uiRangeNode.js"
-        }
-      ]
-    },
-    "_dist_/distortionCtrl.js": {
-      "bytes": 866,
-      "imports": [
-        {
-          "path": "_dist_/uiRangeNode.js"
-        }
-      ]
-    },
-    "_dist_/lowpassCtrl.js": {
-      "bytes": 448,
-      "imports": [
-        {
-          "path": "_dist_/uiRangeNode.js"
-        }
-      ]
-    },
-    "_dist_/playBtn.js": {
-      "bytes": 881,
-      "imports": [
-        {
-          "path": "web_modules/redom.js"
-        }
-      ]
-    },
-    "_dist_/speedCtrl.js": {
-      "bytes": 387,
-      "imports": [
-        {
-          "path": "_dist_/uiRangeNode.js"
-        }
-      ]
-    },
-    "_dist_/volumeCtrl.js": {
-      "bytes": 440,
-      "imports": [
-        {
-          "path": "_dist_/uiRangeNode.js"
-        }
-      ]
-    },
-    "_dist_/sampleUI.js": {
-      "bytes": 2394,
-      "imports": [
-        {
-          "path": "web_modules/redom.js"
-        },
-        {
-          "path": "_dist_/compressorCtrl.js"
-        },
-        {
-          "path": "_dist_/distortionCtrl.js"
-        },
-        {
-          "path": "_dist_/lowpassCtrl.js"
-        },
-        {
-          "path": "_dist_/playBtn.js"
-        },
-        {
-          "path": "_dist_/speedCtrl.js"
-        },
-        {
-          "path": "_dist_/volumeCtrl.js"
-        }
-      ]
+    "_dist_/mathUtility.js": {
+      "bytes": 915,
+      "imports": []
     },
     "_dist_/schallvernichtung.js": {
-      "bytes": 2803,
+      "bytes": 2712,
       "imports": [
         {
           "path": "web_modules/redom.js"
         },
         {
-          "path": "_dist_/recordBtn.js"
+          "path": "_dist_/uiRecordBtn.js"
         },
         {
           "path": "_dist_/recordingHandler.js"
         },
         {
-          "path": "_dist_/sampleBank.js"
+          "path": "_dist_/uiSampleSelect.js"
         },
         {
-          "path": "_dist_/sampleSelect.js"
+          "path": "_dist_/uiSample.js"
         },
         {
-          "path": "_dist_/sampleUI.js"
+          "path": "web_modules/nanoid.js"
+        },
+        {
+          "path": "_dist_/sampleHandler.js"
+        },
+        {
+          "path": "_dist_/sampleNode.js"
+        },
+        {
+          "path": "_dist_/contextNode.js"
+        },
+        {
+          "path": "_dist_/mathUtility.js"
         }
       ]
     }
@@ -175,61 +173,61 @@
       ],
       "inputs": {
         "web_modules/redom.js": {
-          "bytesInOutput": 5376
+          "bytesInOutput": 5379
         },
         "_dist_/recordingEntity.js": {
           "bytesInOutput": 244
         },
         "_dist_/uiButton.js": {
-          "bytesInOutput": 1728
+          "bytesInOutput": 2427
         },
-        "_dist_/recordBtn.js": {
-          "bytesInOutput": 1672
+        "_dist_/uiRecordBtn.js": {
+          "bytesInOutput": 1723
         },
         "__snowpack__/env.js": {
           "bytesInOutput": 56
         },
         "_dist_/recordingHandler.js": {
-          "bytesInOutput": 3518
+          "bytesInOutput": 3609
         },
-        "_dist_/sampleBank.js": {
-          "bytesInOutput": 1002
+        "_dist_/uiSampleSelect.js": {
+          "bytesInOutput": 762
         },
-        "_dist_/sampleSelect.js": {
-          "bytesInOutput": 574
+        "_dist_/sampleEntity.js": {
+          "bytesInOutput": 249
         },
-        "_dist_/audioNodeExt.js": {
-          "bytesInOutput": 930
+        "_dist_/uiSamplePlayBtn.js": {
+          "bytesInOutput": 458
         },
         "_dist_/uiRangeNode.js": {
-          "bytesInOutput": 962
+          "bytesInOutput": 651
         },
-        "_dist_/compressorCtrl.js": {
-          "bytesInOutput": 913
+        "_dist_/uiSample.js": {
+          "bytesInOutput": 1702
         },
-        "_dist_/distortionCtrl.js": {
-          "bytesInOutput": 569
+        "web_modules/nanoid.js": {
+          "bytesInOutput": 188
         },
-        "_dist_/lowpassCtrl.js": {
-          "bytesInOutput": 293
+        "_dist_/sampleHandler.js": {
+          "bytesInOutput": 642
         },
-        "_dist_/playBtn.js": {
-          "bytesInOutput": 510
+        "_dist_/audioNodeExt.js": {
+          "bytesInOutput": 1887
         },
-        "_dist_/speedCtrl.js": {
-          "bytesInOutput": 233
+        "_dist_/sampleNode.js": {
+          "bytesInOutput": 3811
         },
-        "_dist_/volumeCtrl.js": {
-          "bytesInOutput": 297
+        "_dist_/contextNode.js": {
+          "bytesInOutput": 533
         },
-        "_dist_/sampleUI.js": {
-          "bytesInOutput": 1425
+        "_dist_/mathUtility.js": {
+          "bytesInOutput": 383
         },
         "_dist_/schallvernichtung.js": {
-          "bytesInOutput": 1606
+          "bytesInOutput": 1386
         }
       },
-      "bytes": 21940
+      "bytes": 26123
     }
   }
 }

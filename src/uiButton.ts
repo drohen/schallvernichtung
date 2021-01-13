@@ -1,4 +1,4 @@
-import { el, RedomComponent } from "redom"
+import { el, RedomComponent, mount } from "redom"
 
 export interface ButtonInteractionHandler
 {
@@ -18,6 +18,12 @@ enum TouchState
 	holding
 }
 
+export enum ButtonCTA
+{
+	tap,
+	hold
+}
+
 export class UIButton implements RedomComponent
 {
 	private state: string
@@ -26,11 +32,16 @@ export class UIButton implements RedomComponent
 
 	private touchState: TouchState
 
-	public el: HTMLButtonElement
+	private button: HTMLButtonElement
+
+	private label: HTMLParagraphElement
+
+	public el: HTMLDivElement
 
 	constructor(
 		private handler: ButtonInteractionHandler,
 		private stateLabels: {[state: string]: string},
+		private buttonCTA: ButtonCTA = ButtonCTA.tap,
 		initialState: string
 	)
 	{
@@ -47,7 +58,17 @@ export class UIButton implements RedomComponent
 
 		this.touchHold = this.touchHold.bind( this )
 
-		this.el = el( `button`, this.stateLabels[ initialState ] )
+		this.el = el( `div`, { className: `labelButton`, style: { width: `${Object.keys( this.stateLabels ).sort()[ 0 ].length * 1.8}ch` } } )
+
+		this.label = el( `p`, this.stateLabels[ initialState ] )
+
+		mount( this.el, this.label )
+
+		this.button = el( `button` )
+
+		this.setButtonText()
+
+		mount( this.el, this.button )
 
 		this.onDown = this.onDown.bind( this )
 
@@ -74,6 +95,26 @@ export class UIButton implements RedomComponent
 		this.el.addEventListener( `mouseleave`, this.onLeave )
 	}
 
+	private setButtonText( state?: ButtonCTA )
+	{
+		if ( state !== undefined ) this.buttonCTA = state
+
+		switch( this.buttonCTA )
+		{
+			case ButtonCTA.tap:
+
+				this.button.textContent = `Tap here`
+
+				break
+
+			case ButtonCTA.hold:
+
+				this.button.textContent = `Hold here`
+
+				break
+		}
+	}
+
 	private touchEnd( event: TouchEvent )
 	{
 		event.preventDefault()
@@ -84,8 +125,6 @@ export class UIButton implements RedomComponent
 
 		if ( this.touchState === TouchState.holding )
 		{
-			this.touchState = TouchState.idle
-
 			this.onUp()
 		}
 		else
@@ -98,8 +137,6 @@ export class UIButton implements RedomComponent
 
 	private touchHold()
 	{
-		this.touchState = TouchState.holding
-			
 		this.onDown()
 	}
 
@@ -120,28 +157,41 @@ export class UIButton implements RedomComponent
 	{
 		event?.preventDefault()
 
-		this.handler.onUp?.( this.state )
+		this.touchState = TouchState.idle
+
+		this.el.classList.remove( `down` )
+
+		if ( this.buttonCTA !== ButtonCTA.tap ) this.handler.onUp?.( this.state )
 	}
 
 	private onClick( event?: MouseEvent )
 	{
 		event?.preventDefault()
 
-		this.handler.onClick?.( this.state )
+		if ( this.buttonCTA === ButtonCTA.tap ) this.handler.onClick?.( this.state )
 	}
 
 	private onDown( event?: MouseEvent )
 	{
 		event?.preventDefault()
 
-		this.handler.onDown?.( this.state )
+		this.touchState = TouchState.holding
+
+		this.el.classList.add( `down` )
+
+		if ( this.buttonCTA !== ButtonCTA.tap ) this.handler.onDown?.( this.state )
 	}
 
 	private onLeave( event?: MouseEvent )
 	{
 		event?.preventDefault()
 
-		this.handler.onLeave?.( this.state )
+		if ( this.touchState === TouchState.holding )
+		{
+			this.el.classList.remove( `down` )
+		}
+
+		if ( this.buttonCTA === ButtonCTA.hold ) this.handler.onLeave?.( this.state )
 	}
 
 	public setState( state: string ): void
@@ -153,16 +203,21 @@ export class UIButton implements RedomComponent
 
 		this.state = state
 
-		this.el.textContent = this.stateLabels[ this.state ]
+		this.label.textContent = this.stateLabels[ this.state ]
+	}
+
+	public setCTA( state: ButtonCTA ): void
+	{
+		this.setButtonText( state )
 	}
 
 	public enable(): void
 	{
-		this.el.disabled = false
+		this.button.disabled = false
 	}
 
 	public disable(): void
 	{
-		this.el.disabled = true
+		this.button.disabled = true
 	}
 }

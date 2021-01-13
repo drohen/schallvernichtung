@@ -1,9 +1,8 @@
-import type { Entity } from "./entity"
 import type { RedomComponent } from "redom"
 import { RecordingEntity, RecordingState } from "./recordingEntity"
-import { ButtonInteractionHandler, UIButton } from "./uiButton"
+import { ButtonInteractionHandler, UIButton, ButtonCTA } from "./uiButton"
 
-export interface RecordButtonHandler
+export interface UIRecordButtonHandler
 {
 	recordButtonOnStart: () => void
 
@@ -25,7 +24,7 @@ enum ButtonState
 	startRecording = `Starting...`
 }
 
-export class RecordBtn implements RedomComponent, RecordingEntity, ButtonInteractionHandler, Entity
+export class UIRecordBtn implements RedomComponent, RecordingEntity, ButtonInteractionHandler
 {
 	public el: UIButton
 
@@ -35,13 +34,14 @@ export class RecordBtn implements RedomComponent, RecordingEntity, ButtonInterac
 
 	constructor(
 		public id: string,
-		private handler: RecordButtonHandler,
+		private handler: UIRecordButtonHandler,
 		private recordLength: number
 	)
 	{
 		this.el = new UIButton(
 			this,
 			Object.values( ButtonState ).reduce( ( obj, val ) => Object.assign( obj, { [ val ]: val } ), {} ),
+			ButtonCTA.tap,
 			ButtonState.noDevice
 		)
 
@@ -147,12 +147,16 @@ export class RecordBtn implements RedomComponent, RecordingEntity, ButtonInterac
 				this.el.setState( ButtonState.idle )
 
 				this.el.enable()
+
+				this.el.setCTA( ButtonCTA.hold )
 		
 				break
 
 			case RecordingState.noDevice:
 
 				this.el.setState( ButtonState.noDevice )
+
+				this.el.setCTA( ButtonCTA.tap )
 
 				break
 

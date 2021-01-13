@@ -5,16 +5,24 @@ export interface ButtonInteractionHandler {
     onLeave?: (state: string) => void;
     onClick?: (state: string) => void;
 }
+export declare enum ButtonCTA {
+    tap = 0,
+    hold = 1
+}
 export declare class UIButton implements RedomComponent {
     private handler;
     private stateLabels;
+    private buttonCTA;
     private state;
     private touchTimeout;
     private touchState;
-    el: HTMLButtonElement;
+    private button;
+    private label;
+    el: HTMLDivElement;
     constructor(handler: ButtonInteractionHandler, stateLabels: {
         [state: string]: string;
-    }, initialState: string);
+    }, buttonCTA: ButtonCTA, initialState: string);
+    private setButtonText;
     private touchEnd;
     private touchHold;
     private touchStart;
@@ -23,6 +31,7 @@ export declare class UIButton implements RedomComponent {
     private onDown;
     private onLeave;
     setState(state: string): void;
+    setCTA(state: ButtonCTA): void;
     enable(): void;
     disable(): void;
 }

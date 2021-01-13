@@ -16,11 +16,14 @@
 
 	<noscript>Javascript required</noscript>
 
+	<div class="bg"></div>
+
 	<main id="root"></main>
 
 	<script type="module">
 		import {Schallvernichtung} from "./_dist_/schallvernichtung.js"
-		Schallvernichtung.init()
+		
+		new Schallvernichtung( `#root`, `/_dist_/recordingWorker.js` )
 	</script>
 </body>
 
