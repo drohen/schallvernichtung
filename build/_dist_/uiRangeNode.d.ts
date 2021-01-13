@@ -1,17 +1,15 @@
 import { RedomComponent } from "redom";
-import { AudioNodeExtension } from "./audioNodeExt";
-export interface RangeCoreProvider {
-    context: AudioContext;
+export interface UIRangeNodeHandler<T> {
+    onUIRangeChange: (id: T, value: number) => void;
 }
-export declare class UIRangeNode extends AudioNodeExtension implements RedomComponent {
-    protected core: RangeCoreProvider;
+export declare class UIRange<T> implements RedomComponent {
+    private id;
+    private handler;
     el: HTMLInputElement;
     private debounce;
     private debounceCount;
-    constructor(id: string, core: RangeCoreProvider, init?: `min` | `max` | `mid` | number);
-    protected logRange(position: number, min: number, max: number, findPosition?: boolean): number;
+    constructor(id: T, handler: UIRangeNodeHandler<T>, init?: `min` | `max` | `mid` | number);
     private debounceOnChange;
-    protected onChange(value: number): void;
-    protected ramp(param: AudioParam, to: number): void;
+    setValue(value: number): void;
 }
 //# sourceMappingURL=uiRangeNode.d.ts.map

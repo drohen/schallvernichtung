@@ -1,34 +1,25 @@
 import type { Entity } from "./entity";
 import { RecordingSystemCoreProvider } from "./recordingHandler";
-import { SampleCoreProvider } from "./sampleBank";
-import { SampleSelectHandler } from "./sampleSelect";
-export declare class Schallvernichtung implements SampleCoreProvider, SampleSelectHandler, RecordingSystemCoreProvider {
+import { SampleSystemCoreProvider } from "./sampleHandler";
+export declare class Schallvernichtung implements RecordingSystemCoreProvider, SampleSystemCoreProvider {
     private baseEl;
-    context: AudioContext;
+    private contextNodeID;
+    private contextNode;
     private recordBtn;
-    private sourceNode?;
     private recordingHandler;
+    private sampleHandler;
     private sampleBlocks;
-    private sampleBank;
     private samplesMount;
     private sampleList;
-    entities: Entity[];
-    static init(): void;
-    constructor();
+    private _entities;
+    private mathUtility;
+    constructor(mountSelector: string, workerPath: string);
+    private addEntity;
+    private createID;
     private getElOrThrow;
     private wrap;
     private setUI;
+    entities(): Entity[];
     onRecorded(data: Float32Array): void;
-    handleStream(stream: MediaStream): Promise<void>;
-    onError(): void;
-    startRecording(): Promise<void>;
-    stopRecording(): Promise<void>;
-    reloadContext(): Promise<void>;
-    onPlaySample(index: number): Promise<void>;
-    onPauseSample(index: number): Promise<void>;
-    onSampleAdd(index: number): void;
-    onLabelChange(): void;
-    onSampleSelected(index: number, previous?: number): void;
-    getRecorderInputNode(): AudioNode;
 }
 //# sourceMappingURL=schallvernichtung.d.ts.map

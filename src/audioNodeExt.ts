@@ -1,19 +1,37 @@
-export class AudioNodeExtension
+export interface AudioNodeManagerContext
 {
-	public isExt: true
+	isAudioNodeManaged: true
+
+	audioNodeManager: AudioNodeManager
+}
+
+export class AudioNodeManager
+{
+	private inputConnections: {[nodeID: string]: AudioNodeManagerContext}
+
+	private outputConnections: {[nodeID: string]: AudioNodeManagerContext}
 
 	constructor(
-		protected id: string,
+		private id: string,
 		private inputNode?: AudioNode,
 		private outputNode?: AudioNode
 	)
 	{
-		this.isExt = true
+		this.inputConnections = {}
+
+		this.outputConnections = {}
 	}
 
-	private isExtension( node: AudioNode | AudioNodeExtension ): node is AudioNodeExtension
+	private isManaged( context: unknown ): context is AudioNodeManagerContext
 	{
-		return `isExt` in node && node.isExt
+		return `isAudioNodeManaged` in ( context as AudioNodeManagerContext ) 
+			&& ( context as AudioNodeManagerContext ).isAudioNodeManaged
+			&& ( context as AudioNodeManagerContext ).audioNodeManager !== undefined
+	}
+
+	public nodeID(): string
+	{
+		return this.id
 	}
 
 	public setInput( node: AudioNode ): void
@@ -56,11 +74,15 @@ export class AudioNodeExtension
 		return this.outputNode
 	}
 
-	public connectInput( node: AudioNode | AudioNodeExtension ): void
+	public connectInput( node: AudioNode | AudioNodeManagerContext ): void
 	{
-		if ( this.isExtension( node ) )
+		if ( this.isManaged( node ) )
 		{
-			node.output().connect( this.input() )
+			if ( this.inputConnections[ node.audioNodeManager.nodeID() ] ) return
+
+			node.audioNodeManager.output().connect( this.input() )
+
+			this.inputConnections[ node.audioNodeManager.nodeID() ] = node
 		}
 		else
 		{
@@ -68,11 +90,16 @@ export class AudioNodeExtension
 		}
 	}
 
-	public disconnectInput( node: AudioNode | AudioNodeExtension ): void
+	public disconnectInput( node: AudioNode | AudioNodeManagerContext ): void
 	{
-		if ( this.isExtension( node ) )
+		if ( this.isManaged( node ) )
 		{
-			node.output().disconnect( this.input() )
+			if ( this.inputConnections[ node.audioNodeManager.nodeID() ] )
+			{
+				return this.disconnectInputByID( node.audioNodeManager.nodeID() )
+			}
+
+			node.audioNodeManager.output().disconnect( this.input() )
 		}
 		else
 		{
@@ -80,11 +107,27 @@ export class AudioNodeExtension
 		}
 	}
 
-	public connectOutput( node: AudioNode | AudioNodeExtension ): void
+	public disconnectInputByID( id: string ): void
 	{
-		if ( this.isExtension( node ) )
+		if ( this.inputConnections[ id ] )
 		{
-			this.output().connect( node.input() )
+			const node = this.inputConnections[ id ]
+
+			delete this.inputConnections[ id ]
+
+			this.disconnectInput( node )
+		}
+	}
+
+	public connectOutput( node: AudioNode | AudioNodeManagerContext ): void
+	{
+		if ( this.isManaged( node ) )
+		{
+			if ( this.outputConnections[ node.audioNodeManager.nodeID() ] ) return
+
+			this.output().connect( node.audioNodeManager.input() )
+
+			this.outputConnections[ node.audioNodeManager.nodeID() ] = node
 		}
 		else
 		{
@@ -92,15 +135,32 @@ export class AudioNodeExtension
 		}
 	}
 
-	public disconnectOutput( node: AudioNode | AudioNodeExtension ): void
+	public disconnectOutput( node: AudioNode | AudioNodeManagerContext ): void
 	{
-		if ( this.isExtension( node ) )
+		if ( this.isManaged( node ) )
 		{
-			this.output().disconnect( node.input() )
+			if ( this.outputConnections[ node.audioNodeManager.nodeID() ] )
+			{
+				return this.disconnectOutputByID( node.audioNodeManager.nodeID() )
+			}
+
+			this.output().disconnect( node.audioNodeManager.input() )
 		}
 		else
 		{
 			this.output().disconnect( node )
+		}
+	}
+
+	public disconnectOutputByID( id: string ): void
+	{
+		if ( this.outputConnections[ id ] )
+		{
+			const node = this.outputConnections[ id ]
+
+			delete this.outputConnections[ id ]
+
+			this.disconnectOutput( node )
 		}
 	}
 }

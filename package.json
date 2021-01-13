@@ -17,6 +17,7 @@
 	},
 	"license": "MIT",
 	"dependencies": {
+		"nanoid": "^3.1.20",
 		"redom": "^3.27.1"
 	},
 	"repository": {

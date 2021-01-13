@@ -1,5 +1,6 @@
 import type { Entity } from "./entity";
-import type { RecordButtonHandler } from "./recordBtn";
+import type { UIRecordButtonHandler } from "./uiRecordBtn";
+import type { AudioNodeManagerContext } from "./audioNodeExt";
 /**
  * Recording system will manage the APIs responsible
  * for handling the audio captured from a user.
@@ -11,19 +12,22 @@ import type { RecordButtonHandler } from "./recordBtn";
  * - How do we handle the recorded data?
  */
 export interface RecordingSystemCoreProvider {
-    context: AudioContext;
-    entities: Entity[];
+    entities: () => Entity[];
+    onRecorded: (buffer: Float32Array) => void;
+}
+export interface AudioContextProvider {
+    context: () => AudioContext;
+    getRecorderNode: () => AudioNodeManagerContext;
     /**
      * Handle stream then return promise so the button
      * can update its state to handle recording button
      * click to start recording
      */
     handleStream: (stream: MediaStream) => Promise<void>;
-    onRecorded: (buffer: Float32Array) => void;
-    getRecorderInputNode: () => AudioNode;
 }
-export declare class RecordingHandler implements RecordButtonHandler {
+export declare class RecordingHandler implements UIRecordButtonHandler {
     private core;
+    private audio;
     private workerPath;
     private chunkSize;
     private recordLength;
@@ -31,7 +35,7 @@ export declare class RecordingHandler implements RecordButtonHandler {
     private mediaTracks;
     private recorder?;
     private state;
-    constructor(core: RecordingSystemCoreProvider, workerPath: string, chunkSize: number, recordLength: number);
+    constructor(core: RecordingSystemCoreProvider, audio: AudioContextProvider, workerPath: string, chunkSize: number, recordLength: number);
     private setRecorder;
     private unsetRecorder;
     private handleRecorderMessage;
