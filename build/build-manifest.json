@@ -9,7 +9,7 @@
       "imports": []
     },
     "_dist_/uiButton.js": {
-      "bytes": 3621,
+      "bytes": 3925,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -179,7 +179,7 @@
           "bytesInOutput": 244
         },
         "_dist_/uiButton.js": {
-          "bytesInOutput": 2427
+          "bytesInOutput": 2611
         },
         "_dist_/uiRecordBtn.js": {
           "bytesInOutput": 1723
@@ -227,7 +227,7 @@
           "bytesInOutput": 1386
         }
       },
-      "bytes": 26123
+      "bytes": 26307
     }
   }
 }

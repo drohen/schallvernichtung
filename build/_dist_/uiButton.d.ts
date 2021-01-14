@@ -11,15 +11,16 @@ export declare enum ButtonCTA {
 }
 export declare class UIButton implements RedomComponent {
     private handler;
-    private stateLabels;
+    private _stateLabels;
     private buttonCTA;
     private state;
     private touchTimeout;
     private touchState;
     private button;
     private label;
+    private stateLabels;
     el: HTMLDivElement;
-    constructor(handler: ButtonInteractionHandler, stateLabels: {
+    constructor(handler: ButtonInteractionHandler, _stateLabels: {
         [state: string]: string;
     }, buttonCTA: ButtonCTA, initialState: string);
     private setButtonText;

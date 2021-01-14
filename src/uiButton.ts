@@ -34,21 +34,32 @@ export class UIButton implements RedomComponent
 
 	private button: HTMLButtonElement
 
-	private label: HTMLParagraphElement
+	private label: HTMLSpanElement
+
+	private stateLabels: {[state: string]: string}
 
 	public el: HTMLDivElement
 
 	constructor(
 		private handler: ButtonInteractionHandler,
-		private stateLabels: {[state: string]: string},
+		private _stateLabels: {[state: string]: string},
 		private buttonCTA: ButtonCTA = ButtonCTA.tap,
 		initialState: string
 	)
 	{
-		if ( !( initialState in this.stateLabels ) )
+		if ( !( initialState in this._stateLabels ) )
 		{
 			throw Error( `Initial state not available state` )
 		}
+
+		const maxLabelLength = Object.keys( this._stateLabels ).map( k => k.length ).sort().reverse()[ 0 ]
+
+		this.stateLabels = Object.entries( this._stateLabels ).reduce<{[state: string]: string}>( ( obj, [ k, v ] ) => 
+		{
+			obj[ k ] = v.padEnd( maxLabelLength )
+
+			return obj
+		}, {} )
 
 		this.state = initialState
 
@@ -58,11 +69,15 @@ export class UIButton implements RedomComponent
 
 		this.touchHold = this.touchHold.bind( this )
 
-		this.el = el( `div`, { className: `labelButton`, style: { width: `${Object.keys( this.stateLabels ).sort()[ 0 ].length * 1.8}ch` } } )
+		this.el = el( `div`, { className: `labelButton`, style: { maxWidth: `${Math.min( maxLabelLength, 32 )}ch` } } )
 
-		this.label = el( `p`, this.stateLabels[ initialState ] )
+		const p = el( `p` )
 
-		mount( this.el, this.label )
+		this.label = el( `span`, this.stateLabels[ initialState ] )
+
+		mount( p, this.label )
+
+		mount( this.el, p )
 
 		this.button = el( `button` )
 
@@ -72,27 +87,27 @@ export class UIButton implements RedomComponent
 
 		this.onDown = this.onDown.bind( this )
 
-		this.el.addEventListener( `mousedown`, this.onDown )
+		this.button.addEventListener( `mousedown`, this.onDown )
 
 		this.touchStart = this.touchStart.bind( this )
 
-		this.el.addEventListener( `touchstart`, this.touchStart )
+		this.button.addEventListener( `touchstart`, this.touchStart )
 
 		this.touchEnd = this.touchEnd.bind( this )
 
-		this.el.addEventListener( `touchend`, this.touchEnd )
+		this.button.addEventListener( `touchend`, this.touchEnd )
 
 		this.onUp = this.onUp.bind( this )
 
-		this.el.addEventListener( `mouseup`, this.onUp )
+		this.button.addEventListener( `mouseup`, this.onUp )
 
 		this.onClick = this.onClick.bind( this )
 
-		this.el.addEventListener( `click`, this.onClick )
+		this.button.addEventListener( `click`, this.onClick )
 
 		this.onLeave = this.onLeave.bind( this )
 
-		this.el.addEventListener( `mouseleave`, this.onLeave )
+		this.button.addEventListener( `mouseleave`, this.onLeave )
 	}
 
 	private setButtonText( state?: ButtonCTA )

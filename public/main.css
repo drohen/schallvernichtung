@@ -64,14 +64,16 @@ a, button, p, span, div, input
 	width: 100%;
 	position: relative;
 	display: grid;
-	grid-template-rows: max-content;
+	grid-template-rows: min-content;
 	height: 100%;
+	max-width: 100%;
+	grid-template-columns: 100%;
 }
 
 .topLevel
 {
 	padding: 1rem;
-	border: 6px solid var(--dark-200);
+	border: 6px solid var(--dark-100);
 }
 
 .sampleManager
@@ -83,29 +85,51 @@ a, button, p, span, div, input
 .samplesMount
 {
 	padding: 1rem;
-	border: 6px solid var(--dark-200);
+	border: 6px solid var(--dark-100);
 }
 
 .sampleSelect
 {
-	border: 6px solid var(--dark-200);
+	border: 6px solid var(--dark-100);
 }
 
 .labelButton
 {
 	display: grid;
 	place-items: center;
-	height: 77px;
+	width: 100%;
 }
 
 .labelButton p
 {
-	background: var(--dark-200);
-	padding: 0.3rem 0.6rem;
-	margin: 0;
+	margin: 0 0 -4px;
 	width: 100%;
-	text-align: center;
 	font-size: 1rem;
+	line-height: 2rem;
+	position: relative;
+}
+
+.labelButton p::before
+{
+	position: absolute;
+	content: '';
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 1.9rem;
+	background: var(--dark-200);
+	z-index: 0;
+}
+
+.labelButton span
+{
+	display: inline;
+	color: white;
+	padding: 0.3rem 0;
+	background: var(--dark-200);
+	z-index: 1;
+	position: relative;
+	white-space: pre-wrap;
 }
 
 .labelButton button
@@ -114,13 +138,15 @@ a, button, p, span, div, input
 	background: rgba(47, 0, 0, 0.59);
 	padding: 0.5rem;
 	font-size: 1rem;
-	border-left: 1px solid var(--dark-200);
-	border-right: 1px solid var(--dark-200);
+	border-left: 1px solid var(--dark-100);
+	border-right: 1px solid var(--dark-100);
 	border-top: 0px solid transparent;
-	border-bottom: 6px solid var(--dark-200);
+	border-bottom: 6px solid var(--dark-100);
 	width: 98%;
+	height: 45px;
 	border-bottom-left-radius: 8px;
 	border-bottom-right-radius: 8px;
+	box-shadow: 0 -1px 0 var(--dark-100);
 	font-family: var(--base-font);
 	text-align: center;
 	cursor: pointer;
@@ -147,7 +173,7 @@ a, button, p, span, div, input
 }
 
 .sampleItem {
-	border-bottom: 6px solid var(--dark-200);
+	border-bottom: 6px solid var(--dark-100);
 	padding: 1.2rem;
 	cursor: pointer;
 }
@@ -175,7 +201,7 @@ input[type=range]::-webkit-slider-runnable-track,
 input[type=range]::-moz-range-track
 {
 	background: var(--darkblue-200);
-	border: 2px solid var(--dark-200);
+	border: 2px solid var(--dark-100);
 	width: 100%;
 	height: 12px;
 	cursor: pointer;
