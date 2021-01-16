@@ -9,7 +9,7 @@ export class MathUtility implements UISampleCoreProvider, SampleNodeMathProvider
 
 		const minp = 1
 
-		const maxp = 101
+		const maxp = 1000001
 
 		const signSwitch = min < 0 && max < 0
 

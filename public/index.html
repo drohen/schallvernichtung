@@ -6,24 +6,30 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	<link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAP8ABQUFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREREREREBEREREREREQEREREREREQARAREREREREBEBEREREREAEQEREBEREQARARERERERABEBERAREREAEQEQEBEREQARAQAQEREBAAEBEBAREQEAAQEQEBERAQABARAQEBEBAAEAABAQAAEAAAAAEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
+
 	<title>schallvernichtung</title>
 
-	<link rel="stylesheet" type="text/css" href="/main.css" />
+	<style>
+		html, body, #root
+		{
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+	</style>
 
 </head>
 
 <body id="body">
-
 	<noscript>Javascript required</noscript>
-
-	<div class="bg"></div>
 
 	<main id="root"></main>
 
 	<script type="module">
-		import {Schallvernichtung} from "/_dist_/schallvernichtung.js"
+		import {Schallvernichtung} from "/schallvernichtung.js"
 		
-		new Schallvernichtung( `#root`, `/_dist_/recordingWorker.js` )
+		new Schallvernichtung( `#root`, `/recordingWorker.js`, '/schallvernichtung.css' )
 	</script>
 </body>
 

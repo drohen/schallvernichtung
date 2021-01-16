@@ -69,7 +69,7 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 
 		this.volumeNode = this.core.context().createGain()
 
-		this.volumeNode.gain.setValueAtTime( this.math.exponentialValueInRange( 51, 0, 3 ), this.core.context().currentTime )
+		this.volumeNode.gain.setValueAtTime( this.math.exponentialValueInRange( 500001, 0, 3 ), this.core.context().currentTime )
 
 		this.audioNodeManager.setOutput( this.volumeNode )
 		
@@ -149,17 +149,22 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 		param.linearRampToValueAtTime( to, time )
 	}
 
+	private rampTime(): number
+	{
+		return this.core.context().currentTime + 0.5
+	}
+
 	private setCompressor( value: number )
 	{
-		this.ramp( this.compressorGainNode.gain, this.math.exponentialValueInRange( value, -1, -1 ), this.core.context().currentTime + 0.5 )
+		this.ramp( this.compressorGainNode.gain, this.math.exponentialValueInRange( value, -1, -1 ), this.rampTime() )
 
-		this.ramp( this.compressorFilterNode.threshold, 0 - this.math.exponentialValueInRange( value, 10, 100 ), this.core.context().currentTime + 0.5 )
+		this.ramp( this.compressorFilterNode.threshold, 0 - this.math.exponentialValueInRange( value, 10, 100 ), this.rampTime() )
 
-		this.ramp( this.compressorFilterNode.knee, this.math.exponentialValueInRange( value, 4, 40 ), this.core.context().currentTime + 0.5 )
+		this.ramp( this.compressorFilterNode.knee, this.math.exponentialValueInRange( value, 4, 40 ), this.rampTime() )
 
-		this.ramp( this.compressorFilterNode.ratio, this.math.exponentialValueInRange( value, 2, 20 ), this.core.context().currentTime + 0.5 )
+		this.ramp( this.compressorFilterNode.ratio, this.math.exponentialValueInRange( value, 2, 20 ), this.rampTime() )
 
-		this.ramp( this.compressorFilterNode.release, Math.pow( 20, -1 * this.math.exponentialValueInRange( value, 1, 1000 ) ), this.core.context().currentTime + 0.5 )
+		this.ramp( this.compressorFilterNode.release, Math.pow( 20, -1 * this.math.exponentialValueInRange( value, 1, 1000 ) ), this.rampTime() )
 	}
 
 	private setDistortion( value: number )
@@ -171,17 +176,17 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 
 	private setLowpass( value: number )
 	{
-		this.ramp( this.lowpassFilterNode.frequency, 6000 - this.math.exponentialValueInRange( value, 0, 5950 * 0.005 ) * 200, this.core.context().currentTime + 0.5 )
+		this.ramp( this.lowpassFilterNode.frequency, 6000 - this.math.exponentialValueInRange( value, 0, 5950 * 0.005 ) * 200, this.rampTime() )
 	}
 
 	private setSpeed( value: number )
 	{
-		this.ramp( this.bufferNode.playbackRate, this.math.exponentialValueInRange( value, 0.1, 3 ), this.core.context().currentTime + 0.5 )
+		this.ramp( this.bufferNode.playbackRate, this.math.exponentialValueInRange( value, 0.1, 3 ), this.rampTime() )
 	}
 
 	private setVolume( value: number )
 	{
-		this.ramp( this.volumeNode.gain, this.math.exponentialValueInRange( value, 0, 3 ), this.core.context().currentTime + 0.5 )
+		this.ramp( this.volumeNode.gain, this.math.exponentialValueInRange( value, 0, 3 ), this.rampTime() )
 	}
 
 	public onSampleStateChanged( sampleID: string, state: SampleState, previous: SampleState ): void

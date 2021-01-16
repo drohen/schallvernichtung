@@ -1,92 +1,21 @@
 {
   "inputs": {
-    "web_modules/redom.js": {
-      "bytes": 12711,
-      "imports": []
-    },
-    "_dist_/recordingEntity.js": {
-      "bytes": 617,
-      "imports": []
-    },
-    "_dist_/uiButton.js": {
-      "bytes": 3621,
-      "imports": [
-        {
-          "path": "web_modules/redom.js"
-        }
-      ]
-    },
-    "_dist_/uiRecordBtn.js": {
-      "bytes": 2981,
-      "imports": [
-        {
-          "path": "_dist_/recordingEntity.js"
-        },
-        {
-          "path": "_dist_/uiButton.js"
-        }
-      ]
-    },
     "__snowpack__/env.js": {
       "bytes": 73,
       "imports": []
     },
-    "_dist_/recordingHandler.js": {
-      "bytes": 5891,
+    "recordingEntity.js": {
+      "bytes": 617,
+      "imports": []
+    },
+    "recordingHandler.js": {
+      "bytes": 5890,
       "imports": [
         {
           "path": "__snowpack__/env.js"
         },
         {
-          "path": "_dist_/recordingEntity.js"
-        }
-      ]
-    },
-    "_dist_/uiSampleSelect.js": {
-      "bytes": 1199,
-      "imports": [
-        {
-          "path": "web_modules/redom.js"
-        }
-      ]
-    },
-    "_dist_/sampleEntity.js": {
-      "bytes": 581,
-      "imports": []
-    },
-    "_dist_/uiSamplePlayBtn.js": {
-      "bytes": 911,
-      "imports": [
-        {
-          "path": "_dist_/sampleEntity.js"
-        },
-        {
-          "path": "_dist_/uiButton.js"
-        }
-      ]
-    },
-    "_dist_/uiRangeNode.js": {
-      "bytes": 922,
-      "imports": [
-        {
-          "path": "web_modules/redom.js"
-        }
-      ]
-    },
-    "_dist_/uiSample.js": {
-      "bytes": 3011,
-      "imports": [
-        {
-          "path": "web_modules/redom.js"
-        },
-        {
-          "path": "_dist_/uiSamplePlayBtn.js"
-        },
-        {
-          "path": "_dist_/uiRangeNode.js"
-        },
-        {
-          "path": "_dist_/sampleEntity.js"
+          "path": "recordingEntity.js"
         }
       ]
     },
@@ -94,140 +23,225 @@
       "bytes": 912,
       "imports": []
     },
-    "_dist_/sampleHandler.js": {
+    "sampleEntity.js": {
+      "bytes": 581,
+      "imports": []
+    },
+    "sampleHandler.js": {
       "bytes": 1188,
       "imports": [
         {
-          "path": "_dist_/sampleEntity.js"
+          "path": "sampleEntity.js"
         }
       ]
     },
-    "_dist_/audioNodeExt.js": {
+    "audioNodeExt.js": {
       "bytes": 2664,
       "imports": []
     },
-    "_dist_/sampleNode.js": {
-      "bytes": 5117,
+    "sampleNode.js": {
+      "bytes": 5014,
       "imports": [
         {
-          "path": "_dist_/audioNodeExt.js"
+          "path": "audioNodeExt.js"
         },
         {
-          "path": "_dist_/sampleEntity.js"
+          "path": "sampleEntity.js"
         }
       ]
     },
-    "_dist_/contextNode.js": {
+    "contextNode.js": {
       "bytes": 790,
       "imports": [
         {
-          "path": "_dist_/audioNodeExt.js"
+          "path": "audioNodeExt.js"
         }
       ]
     },
-    "_dist_/mathUtility.js": {
-      "bytes": 915,
+    "mathUtility.js": {
+      "bytes": 919,
       "imports": []
     },
-    "_dist_/schallvernichtung.js": {
-      "bytes": 2712,
+    "web_modules/redom.js": {
+      "bytes": 12711,
+      "imports": []
+    },
+    "uiSampleSelect.js": {
+      "bytes": 1602,
       "imports": [
         {
           "path": "web_modules/redom.js"
         },
         {
-          "path": "_dist_/uiRecordBtn.js"
+          "path": "sampleEntity.js"
+        }
+      ]
+    },
+    "uiButton.js": {
+      "bytes": 3948,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        }
+      ]
+    },
+    "uiSamplePlayBtn.js": {
+      "bytes": 911,
+      "imports": [
+        {
+          "path": "sampleEntity.js"
         },
         {
-          "path": "_dist_/recordingHandler.js"
+          "path": "uiButton.js"
+        }
+      ]
+    },
+    "uiRangeNode.js": {
+      "bytes": 4561,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        }
+      ]
+    },
+    "uiSample.js": {
+      "bytes": 2776,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
         },
         {
-          "path": "_dist_/uiSampleSelect.js"
+          "path": "uiSamplePlayBtn.js"
         },
         {
-          "path": "_dist_/uiSample.js"
+          "path": "uiRangeNode.js"
+        },
+        {
+          "path": "sampleEntity.js"
+        }
+      ]
+    },
+    "uiRecordBtn.js": {
+      "bytes": 2981,
+      "imports": [
+        {
+          "path": "recordingEntity.js"
+        },
+        {
+          "path": "uiButton.js"
+        }
+      ]
+    },
+    "uiLayout.js": {
+      "bytes": 2405,
+      "imports": [
+        {
+          "path": "web_modules/redom.js"
+        },
+        {
+          "path": "uiSampleSelect.js"
+        },
+        {
+          "path": "uiSample.js"
+        },
+        {
+          "path": "uiRecordBtn.js"
+        }
+      ]
+    },
+    "schallvernichtung.js": {
+      "bytes": 1486,
+      "imports": [
+        {
+          "path": "recordingHandler.js"
         },
         {
           "path": "web_modules/nanoid.js"
         },
         {
-          "path": "_dist_/sampleHandler.js"
+          "path": "sampleHandler.js"
         },
         {
-          "path": "_dist_/sampleNode.js"
+          "path": "sampleNode.js"
         },
         {
-          "path": "_dist_/contextNode.js"
+          "path": "contextNode.js"
         },
         {
-          "path": "_dist_/mathUtility.js"
+          "path": "mathUtility.js"
+        },
+        {
+          "path": "uiLayout.js"
         }
       ]
     }
   },
   "outputs": {
-    "../node_modules/.cache/snowpack/~~bundle~~/_dist_/schallvernichtung.js": {
+    "../node_modules/.cache/snowpack/~~bundle~~/schallvernichtung.js": {
       "imports": [],
       "exports": [
         "Schallvernichtung"
       ],
       "inputs": {
-        "web_modules/redom.js": {
-          "bytesInOutput": 5379
+        "__snowpack__/env.js": {
+          "bytesInOutput": 55
         },
-        "_dist_/recordingEntity.js": {
+        "recordingEntity.js": {
           "bytesInOutput": 244
         },
-        "_dist_/uiButton.js": {
-          "bytesInOutput": 2427
-        },
-        "_dist_/uiRecordBtn.js": {
-          "bytesInOutput": 1723
-        },
-        "__snowpack__/env.js": {
-          "bytesInOutput": 56
-        },
-        "_dist_/recordingHandler.js": {
-          "bytesInOutput": 3609
-        },
-        "_dist_/uiSampleSelect.js": {
-          "bytesInOutput": 762
-        },
-        "_dist_/sampleEntity.js": {
-          "bytesInOutput": 249
-        },
-        "_dist_/uiSamplePlayBtn.js": {
-          "bytesInOutput": 458
-        },
-        "_dist_/uiRangeNode.js": {
-          "bytesInOutput": 651
-        },
-        "_dist_/uiSample.js": {
-          "bytesInOutput": 1702
+        "recordingHandler.js": {
+          "bytesInOutput": 3608
         },
         "web_modules/nanoid.js": {
-          "bytesInOutput": 188
+          "bytesInOutput": 187
         },
-        "_dist_/sampleHandler.js": {
+        "sampleEntity.js": {
+          "bytesInOutput": 249
+        },
+        "sampleHandler.js": {
           "bytesInOutput": 642
         },
-        "_dist_/audioNodeExt.js": {
+        "audioNodeExt.js": {
           "bytesInOutput": 1887
         },
-        "_dist_/sampleNode.js": {
-          "bytesInOutput": 3811
+        "sampleNode.js": {
+          "bytesInOutput": 3716
         },
-        "_dist_/contextNode.js": {
+        "contextNode.js": {
           "bytesInOutput": 533
         },
-        "_dist_/mathUtility.js": {
-          "bytesInOutput": 383
+        "mathUtility.js": {
+          "bytesInOutput": 387
         },
-        "_dist_/schallvernichtung.js": {
-          "bytesInOutput": 1386
+        "web_modules/redom.js": {
+          "bytesInOutput": 5388
+        },
+        "uiSampleSelect.js": {
+          "bytesInOutput": 939
+        },
+        "uiButton.js": {
+          "bytesInOutput": 2631
+        },
+        "uiSamplePlayBtn.js": {
+          "bytesInOutput": 458
+        },
+        "uiRangeNode.js": {
+          "bytesInOutput": 3079
+        },
+        "uiSample.js": {
+          "bytesInOutput": 1574
+        },
+        "uiRecordBtn.js": {
+          "bytesInOutput": 1723
+        },
+        "uiLayout.js": {
+          "bytesInOutput": 1322
+        },
+        "schallvernichtung.js": {
+          "bytesInOutput": 718
         }
       },
-      "bytes": 26123
+      "bytes": 29373
     }
   }
 }

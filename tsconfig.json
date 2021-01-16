@@ -28,7 +28,7 @@
 		"declaration": true,
 		"emitDeclarationOnly": true,
 		"declarationMap": true,
-		"declarationDir": "build/_dist_",
+		"declarationDir": "build",
 		"lib": [
 			"esnext",
 			"dom"
