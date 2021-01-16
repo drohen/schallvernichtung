@@ -1,7 +1,10 @@
 {
     "mount": {
-        "public": "/",
-        "src": "/_dist_"
+        "public": {
+            "url": "/",
+            "static": true
+        },
+        "src": "/"
     },
     "plugins": [
         [
@@ -14,7 +17,7 @@
     ],
 	"experiments": {
 		"optimize": {
-			"entrypoints": ["_dist_/schallvernichtung.js"],
+			"entrypoints": ["schallvernichtung.js"],
 			"bundle": true,
 			"minify": true,
 			"target": "es2020"

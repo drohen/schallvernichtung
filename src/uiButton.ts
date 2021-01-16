@@ -138,7 +138,7 @@ export class UIButton implements RedomComponent
 
 		clearTimeout( this.touchTimeout )
 
-		if ( this.touchState === TouchState.holding )
+		if ( this.touchState === TouchState.holding  && this.buttonCTA === ButtonCTA.hold )
 		{
 			this.onUp()
 		}

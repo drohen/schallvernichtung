@@ -1,5 +1,5 @@
 import { el, mount, RedomComponent } from "redom"
-import type { SampleEntity, SampleState } from "./sampleEntity"
+import { SampleEntity, SampleState } from "./sampleEntity"
 
 export interface SampleSelectHandler
 {
@@ -41,7 +41,20 @@ export class UISampleSelect implements RedomComponent, SampleEntity
 
 	public onSampleStateChanged( sampleID: string, state: SampleState ): void
 	{
-		// TODO: show playing color/icon
+		switch( state )
+		{
+			case SampleState.paused:
+
+				this.elements[ sampleID ].classList.remove( `playing` )
+
+				break
+
+			case SampleState.playing:
+
+				this.elements[ sampleID ].classList.add( `playing` )
+
+				break
+		}
 	}
 
 	public onSampleSelectedChanged( sampleID: string ): void
@@ -51,6 +64,8 @@ export class UISampleSelect implements RedomComponent, SampleEntity
 		this.elements[ sampleID ].classList.add( `selected` )
 
 		this.selectedID = sampleID
+
+		window.scrollTo( 0, 0 )
 	}
 
 	public onSampleNodeValueChange(): void
@@ -70,7 +85,15 @@ export class UISampleSelect implements RedomComponent, SampleEntity
 			throw Error( `Select list already contains sample ${sampleID}` )
 		}
 
-		const item = el( `div.sampleItem`, `Sample ${( new Date() ).toUTCString()}` )
+		const label = el( `span`, `Sample ${( new Date() ).toUTCString()}` )
+
+		const labelWrap = el( `p` )
+
+		mount( labelWrap, label )
+
+		const item = el( `div.sampleItem` )
+
+		mount( item, labelWrap )
 
 		item.addEventListener( `click`, ( event: MouseEvent ) => 
 		{
