@@ -18,7 +18,8 @@ export declare class UILayout implements SampleEntity {
     private samplesMount;
     private sampleList;
     private recordBtn;
-    constructor(id: string, handler: UILayoutHandler, sampleHandler: SampleHandler, mathUtility: MathUtility, mountSelector: string, recordingHandler: RecordingHandler, recordLength: number);
+    constructor(id: string, handler: UILayoutHandler, sampleHandler: SampleHandler, mathUtility: MathUtility, mountSelector: string, recordingHandler: RecordingHandler, recordLength: number, cssPath: string);
+    private addStylesheet;
     private getElOrThrow;
     private wrap;
     private setUI;

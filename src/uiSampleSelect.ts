@@ -64,8 +64,6 @@ export class UISampleSelect implements RedomComponent, SampleEntity
 		this.elements[ sampleID ].classList.add( `selected` )
 
 		this.selectedID = sampleID
-
-		window.scrollTo( 0, 0 )
 	}
 
 	public onSampleNodeValueChange(): void

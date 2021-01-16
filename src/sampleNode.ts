@@ -69,7 +69,7 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 
 		this.volumeNode = this.core.context().createGain()
 
-		this.volumeNode.gain.setValueAtTime( this.math.exponentialValueInRange( 51, 0, 3 ), this.core.context().currentTime )
+		this.volumeNode.gain.setValueAtTime( this.math.exponentialValueInRange( 500001, 0, 3 ), this.core.context().currentTime )
 
 		this.audioNodeManager.setOutput( this.volumeNode )
 		

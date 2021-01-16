@@ -1,4 +1,3 @@
-import './schallvernichtung.css'
 import type { Entity } from "./entity"
 import { RecordingHandler, RecordingSystemCoreProvider } from "./recordingHandler"
 import { nanoid } from "nanoid"
@@ -28,7 +27,7 @@ implements
 
 	private ui: UILayout
 
-	constructor( mountSelector: string, workerPath: string )
+	constructor( mountSelector: string, workerPath: string, cssPath: string )
 	{
 		const recordLength = 10
 
@@ -53,7 +52,8 @@ implements
 			this.mathUtility, 
 			mountSelector, 
 			this.recordingHandler, 
-			recordLength )
+			recordLength,
+			cssPath )
 
 		this.addEntity( this.ui )
 	}

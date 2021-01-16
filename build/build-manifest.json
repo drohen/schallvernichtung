@@ -1,9 +1,5 @@
 {
   "inputs": {
-    "schallvernichtung.css": {
-      "bytes": 19404,
-      "imports": []
-    },
     "__snowpack__/env.js": {
       "bytes": 73,
       "imports": []
@@ -44,7 +40,7 @@
       "imports": []
     },
     "sampleNode.js": {
-      "bytes": 5010,
+      "bytes": 5014,
       "imports": [
         {
           "path": "audioNodeExt.js"
@@ -63,7 +59,7 @@
       ]
     },
     "mathUtility.js": {
-      "bytes": 915,
+      "bytes": 919,
       "imports": []
     },
     "web_modules/redom.js": {
@@ -71,7 +67,7 @@
       "imports": []
     },
     "uiSampleSelect.js": {
-      "bytes": 1629,
+      "bytes": 1602,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -101,7 +97,7 @@
       ]
     },
     "uiRangeNode.js": {
-      "bytes": 921,
+      "bytes": 4561,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -109,7 +105,7 @@
       ]
     },
     "uiSample.js": {
-      "bytes": 3010,
+      "bytes": 2776,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -137,7 +133,7 @@
       ]
     },
     "uiLayout.js": {
-      "bytes": 2151,
+      "bytes": 2405,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -154,11 +150,8 @@
       ]
     },
     "schallvernichtung.js": {
-      "bytes": 1502,
+      "bytes": 1486,
       "imports": [
-        {
-          "path": "schallvernichtung.css"
-        },
         {
           "path": "recordingHandler.js"
         },
@@ -190,9 +183,6 @@
         "Schallvernichtung"
       ],
       "inputs": {
-        "schallvernichtung.css": {
-          "bytesInOutput": 0
-        },
         "__snowpack__/env.js": {
           "bytesInOutput": 55
         },
@@ -215,19 +205,19 @@
           "bytesInOutput": 1887
         },
         "sampleNode.js": {
-          "bytesInOutput": 3712
+          "bytesInOutput": 3716
         },
         "contextNode.js": {
           "bytesInOutput": 533
         },
         "mathUtility.js": {
-          "bytesInOutput": 383
+          "bytesInOutput": 387
         },
         "web_modules/redom.js": {
           "bytesInOutput": 5388
         },
         "uiSampleSelect.js": {
-          "bytesInOutput": 960
+          "bytesInOutput": 939
         },
         "uiButton.js": {
           "bytesInOutput": 2631
@@ -236,31 +226,22 @@
           "bytesInOutput": 458
         },
         "uiRangeNode.js": {
-          "bytesInOutput": 651
+          "bytesInOutput": 3079
         },
         "uiSample.js": {
-          "bytesInOutput": 1702
+          "bytesInOutput": 1574
         },
         "uiRecordBtn.js": {
           "bytesInOutput": 1723
         },
         "uiLayout.js": {
-          "bytesInOutput": 1149
+          "bytesInOutput": 1322
         },
         "schallvernichtung.js": {
-          "bytesInOutput": 714
+          "bytesInOutput": 718
         }
       },
-      "bytes": 26909
-    },
-    "../node_modules/.cache/snowpack/~~bundle~~/schallvernichtung.css": {
-      "imports": [],
-      "inputs": {
-        "schallvernichtung.css": {
-          "bytesInOutput": 18789
-        }
-      },
-      "bytes": 18790
+      "bytes": 29373
     }
   }
 }

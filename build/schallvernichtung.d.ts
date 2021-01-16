@@ -1,4 +1,3 @@
-import './schallvernichtung.css';
 import type { Entity } from "./entity";
 import { RecordingSystemCoreProvider } from "./recordingHandler";
 import { SampleSystemCoreProvider } from "./sampleHandler";
@@ -11,7 +10,7 @@ export declare class Schallvernichtung implements RecordingSystemCoreProvider, S
     private _entities;
     private mathUtility;
     private ui;
-    constructor(mountSelector: string, workerPath: string);
+    constructor(mountSelector: string, workerPath: string, cssPath: string);
     addEntity(entity: Entity): void;
     createID(): string;
     entities(): Entity[];

@@ -22,7 +22,6 @@ export declare class UISample implements RedomComponent, UIRangeNodeHandler<Samp
     private speedCtrl;
     private state;
     constructor(id: string, sampleID: string, handler: UISampleHandler, core: UISampleCoreProvider);
-    private wrap;
     show(): void;
     hide(): void;
     onUIRangeChange(rangeID: SampleUINodeID, value: number): void;

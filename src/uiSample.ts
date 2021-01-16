@@ -54,51 +54,37 @@ export class UISample implements RedomComponent, UIRangeNodeHandler<SampleUINode
 
 		this.playBtn = new UISamplePlayBtn( sampleID, this.handler )
 
-		this.volumeCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.volume, this, `mid` )
+		this.volumeCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.volume, this, `Slide to control volume`, 500001 )
 
-		this.lowpassCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.lowpass, this )
+		this.lowpassCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.lowpass, this, `Slide to control filter` )
 
-		this.distortionCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.distortion, this )
+		this.distortionCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.distortion, this, `Slide to control distortion` )
 
-		this.compressorCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.compressor, this )
+		this.compressorCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.compressor, this, `Slide to control compressor` )
 
-		this.speedCtrl = new UIRange<SampleUINodeID>( SampleUINodeID.speed, this, core.getPositionForLogRangeValue( 1, 0.1, 3 ) )
+		this.speedCtrl = new UIRange<SampleUINodeID>( 
+			SampleUINodeID.speed, 
+			this, 
+			`Slide to control speed`, 
+			core.getPositionForLogRangeValue( 1, 0.1, 3 ) )
 
 		/**
 		 * Speed control
 		 */
 
-		// this.speedCtrl.el.value = `${this.logRange( 1, 0.1, 3, true )}`
+		mount( this.el, this.playBtn ) 
 
-		mount( this.el, this.wrap( this.playBtn ) )
+		mount( this.el, this.compressorCtrl ) 
 
-		mount( this.el, this.wrap( this.compressorCtrl, `Slide to control compressor` ) )
+		mount( this.el, this.distortionCtrl ) 
 
-		mount( this.el, this.wrap( this.distortionCtrl, `Slide to control distortion` ) )
+		mount( this.el, this.lowpassCtrl ) 
 
-		mount( this.el, this.wrap( this.lowpassCtrl, `Slide to control filter` ) )
+		mount( this.el, this.volumeCtrl ) 
 
-		mount( this.el, this.wrap( this.volumeCtrl, `Slide to control volume` ) )
-
-		mount( this.el, this.wrap( this.speedCtrl, `Slide to control speed` ) )
+		mount( this.el, this.speedCtrl ) 
 
 		this.state = Visibility.hidden
-	}
-
-	private wrap( inner: RedomComponent, label?: string )
-	{
-		const div = el( `div` )
-
-		if ( label )
-		{
-			const text = el( `p`, label )
-	
-			mount( div, text )
-		}
-
-		mount( div, inner )
-
-		return div
 	}
 
 	public show(): void
@@ -133,7 +119,7 @@ export class UISample implements RedomComponent, UIRangeNodeHandler<SampleUINode
 
 	public onSampleNodeValueChange( sampleID: string, nodeID: string, value: number ): void
 	{
-		if ( sampleID !== this.id ) return
+		if ( sampleID !== this.sampleID ) return
 
 		switch( nodeID )
 		{

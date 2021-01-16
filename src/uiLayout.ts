@@ -36,11 +36,13 @@ export class UILayout implements SampleEntity
 		private mathUtility: MathUtility,
 		mountSelector: string,
 		recordingHandler: RecordingHandler,
-		recordLength: number
+		recordLength: number,
+		cssPath: string
 	)
 	{
-
 		const root = this.getElOrThrow( mountSelector )
+
+		this.addStylesheet( cssPath )
 
 		const outer = el( `div.schallvernichtung` )
 
@@ -67,6 +69,15 @@ export class UILayout implements SampleEntity
 		this.isSampleEntity = true
 
 		this.setUI()
+	}
+
+	private addStylesheet( path: string )
+	{
+		const head = this.getElOrThrow( `head` )
+
+		const link = el( `link`, { type: `text/css`, rel: `stylesheet`, href: path } )
+
+		head.appendChild( link )
 	}
 
 	private getElOrThrow<T extends HTMLElement>( selector: string ): T
@@ -125,12 +136,12 @@ export class UILayout implements SampleEntity
 
 	public onSampleStateChanged( sampleID: string, state: SampleState, previous: SampleState ): void
 	{
-		// disable/enable pause all button
+		// mute/unmute all button
 	}
 
 	public onSampleSelectedChanged( sampleID: string ): void
 	{
-		// set selected label
+		this.baseEl.scrollTo( 0, 0 )
 	}
 
 	public onSampleNodeValueChange(): void
