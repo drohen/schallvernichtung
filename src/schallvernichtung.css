@@ -133,7 +133,7 @@
 .schallvernichtung .rangeChange p span
 {
 	display: inline;
-	color: white;
+	color: var(--schall-off-white);
 	padding: 0.3rem 0;
 	background: var(--schall-dark-200);
 	z-index: 2;

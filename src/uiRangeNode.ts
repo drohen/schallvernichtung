@@ -1,4 +1,4 @@
-import { el, mount, RedomComponent, setChildren } from "redom"
+import { el, mount, RedomComponent } from "redom"
 
 export interface UIRangeNodeHandler<T>
 {
@@ -14,17 +14,21 @@ enum RangeState
 	released
 }
 
+enum ImageLoaded
+{
+	notLoaded,
+	loaded
+}
+
 export class UIRange<T> implements RedomComponent
 {
 	public el: HTMLElement
 
 	private labelEl: HTMLSpanElement
 
-	private valueEl: HTMLSpanElement
+	private canvas: HTMLCanvasElement
 
-	private interactEl: HTMLElement
-
-	private interactInner: HTMLElement
+	private context2D: CanvasRenderingContext2D
 
 	private value: number
 
@@ -41,6 +45,18 @@ export class UIRange<T> implements RedomComponent
 	private state: RangeState
 
 	private startX: number
+
+	private img: HTMLImageElement
+
+	private leftArrows: string
+
+	private rightArrows: string
+
+	private arrowWidth: number
+
+	private arrowHeight: number
+
+	private imageLoaded: ImageLoaded
 
 	constructor(
 		private id: T,
@@ -61,23 +77,45 @@ export class UIRange<T> implements RedomComponent
 
 		mount( this.el, labelP )
 
-		const valueP = el( `p` )
+		this.canvas = el( `canvas` ) as HTMLCanvasElement
 
-		this.valueEl = el( `span`, `${init}` )
+		this.canvas.width = 384
 
-		mount( valueP, this.valueEl )
+		this.canvas.height = 96
 
-		mount( this.el, valueP )
+		const context = this.canvas.getContext( `2d` )
 
-		this.interactEl = el( `div.rangeInteract` )
+		if ( !context )
+		{
+			throw Error( `No canvas context for ui range node ${this.id}` )
+		}
 
-		this.interactInner = el( `div.rangeInteractInner` )
+		this.context2D = context
+		
+		mount( this.el, this.canvas )
 
-		mount( this.interactEl, this.interactInner )
+		this.context2D.font = `57px "Courier New", Courier, monospace`
 
-		mount( this.el, this.interactEl )
+		this.leftArrows = `‹‹‹‹‹‹‹‹‹`
 
-		this.buildInteract()
+		this.rightArrows = `›››››››››`
+
+		const measure = this.context2D.measureText( this.leftArrows )
+
+		this.arrowWidth = measure.width
+
+		this.arrowHeight = measure.actualBoundingBoxAscent
+
+		this.imageLoaded = ImageLoaded.notLoaded
+
+		this.img = new Image( 38, 38 )
+
+		this.img.onload = () =>
+		{
+			this.imageLoaded = ImageLoaded.loaded
+		}
+		
+		this.img.src = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAQAAAACNCElAAACgklEQVRIx82WS0iUURTH/6MyzWhgZY6LYCIbFMVHYWUQBD0hbBFWC3tZA2ktSpMWBTUF0fTYBNKmoo2LkISihRBEC7OFpE3tXEQPKMceRpQlPXT+nXu/mXFmyuab75tF/8PAHO7lN+eee+45AySrAj2l9NIhhk6UwIbWYqScvXzJQd7gYuIZFlmHbQNbaOgBfQRRaR3WCDbzu4Z94UoFq7AF28WfGjaSDdgOTmjYa66zD9vHiIYNs8Y+bA9/aNgo67IR2ZSGfeDybMAmNewNl9mHtUfr7AWXZiMyI2fjXG0ftp8xbVSwGjgRwHltx5Ere5zazMFao6VBblCw9wg3sonb1XdiEG0Ia+tGE8rTwnZHnxMlRiereSfq9fE2PXRJUV9jlZiHOIPT6NO2fqjqT1jD9AUoVcvjmoh7n1nLVXEvyBwWcqF8VMybGAoy14Dkw6/tcjJsi2x7FfeeSzSf4t43HuReWR1jgHNkn+/cFTfgxgCeOlhpZCUJFpauNh73vvJuwtovXuDNaIFvlSjB+yGgAJzHW/JLV3mIeTzAREWYXlPsZIHABq5rmDe+0MsuZqpRnlWwSJkc04VHHoZoXffkYmRirIFDpb8QLLUB0w2hLVYQHkj6rUs3hKIYrARSL0P2IvPGYLPQCilQaxrjEnXI/OnKL4bwrWmzSn7SdC1Gv4t+C6jHRtdLma55ODqXJ2SWf8wI1qBQHZid+siL0IVIDo9kBNOtqfbvLagF7MgA9UQN6ofwzfTH5a2X3SZvMcj5xDvUzdwemzFZz34TsIA6YA/K/tVr3dLxedEsbGe6OXAYvGQCdkrB/Olg7f8z7CSPsT7BViR5hr/ALMy0pcB+A9RSdD00vbpEAAAAAElFTkSuQmCC`
 
 		this.increment = 0
 
@@ -105,7 +143,13 @@ export class UIRange<T> implements RedomComponent
 
 		this.setValue = this.setValue.bind( this )
 
-		this.setEvents()
+		this.flipflop = this.flipflop.bind( this )
+
+		this.renderCanvas = this.renderCanvas.bind( this )
+
+		this.setCanvasEvents()
+
+		this.renderCanvas()
 	}
 
 	private handleUp()
@@ -117,9 +161,9 @@ export class UIRange<T> implements RedomComponent
 		this.onUp()
 	}
 
-	private setEvents()
+	private setCanvasEvents()
 	{
-		this.interactEl.addEventListener( `mousedown`, event =>
+		this.canvas.addEventListener( `mousedown`, event =>
 		{
 			window.addEventListener( `mouseup`, this.handleUp )
 
@@ -128,7 +172,7 @@ export class UIRange<T> implements RedomComponent
 			this.onDown( event.clientX )
 		} )
 
-		this.interactEl.addEventListener( `touchstart`, event =>
+		this.canvas.addEventListener( `touchstart`, event =>
 		{
 			window.addEventListener( `mouseup`, this.handleUp )
 
@@ -137,7 +181,7 @@ export class UIRange<T> implements RedomComponent
 			this.onDown( event.touches[ 0 ].clientX )
 		} )
 
-		this.interactEl.addEventListener( `mousemove`, event =>
+		this.canvas.addEventListener( `mousemove`, event =>
 		{
 			event.preventDefault()
 
@@ -146,7 +190,7 @@ export class UIRange<T> implements RedomComponent
 			this.onDrag( event.clientX )
 		} )
 
-		this.interactEl.addEventListener( `touchmove`, event =>
+		this.canvas.addEventListener( `touchmove`, event =>
 		{
 			event.preventDefault()
 
@@ -175,9 +219,7 @@ export class UIRange<T> implements RedomComponent
 
 		this.startX = 0
 
-		this.interactInner.removeAttribute( `data-left` )
-
-		this.interactInner.removeAttribute( `style` )
+		this.renderCanvas()
 	}
 
 	private onDrag( position: number )
@@ -191,9 +233,9 @@ export class UIRange<T> implements RedomComponent
 
 		if ( this.state !== RangeState.slide ) return
 
-		const w = this.interactEl.clientWidth
+		const { width } = this.canvas
 
-		if ( position > w || position < 0 ) return
+		if ( position > width || position < 0 ) return
 
 		// starting point anywhere from mid to opposite side of direction
 		// means 0 is start, 50% of width move is 1000 increment
@@ -214,21 +256,26 @@ export class UIRange<T> implements RedomComponent
 			return
 		}
 
-		const mid = this.interactEl.clientWidth * 0.5
+		const mid = width * 0.5
 
 		const limit = direction === -1
 			? this.startX < mid
 				? this.startX / mid * ( this.maxIncrement + this.minIncrement )
 				: ( this.maxIncrement + this.minIncrement )
 			: this.startX > mid
-				? ( this.interactEl.clientWidth - this.startX ) / mid * ( this.maxIncrement + this.minIncrement )
+				? ( width - this.startX ) / mid * ( this.maxIncrement + this.minIncrement )
 				: ( this.maxIncrement + this.minIncrement )
 
 		const d = direction === -1
 			? ( ( position - this.startX ) / this.startX )
-			: ( ( position - this.startX ) / ( this.interactEl.clientWidth - this.startX ) )
+			: ( ( position - this.startX ) / ( width - this.startX ) )
 
 		this.increment = d * limit - this.minIncrement
+	}
+
+	private flipflop()
+	{
+		requestAnimationFrame( this.updateValue )
 	}
 	
 	private updateValue()
@@ -249,30 +296,102 @@ export class UIRange<T> implements RedomComponent
 			this.id, 
 			Math.max( Math.min( this.value + this.increment, this.maxValue ), this.minValue ) )
 
-		const left = this.increment / this.maxIncrement
+		this.renderCanvas()
 
-		this.interactInner.setAttribute( `data-left`, `${left}` )
-
-		this.interactInner.style.left = `${-15 + ( 15 * left )}%`
-
-		requestAnimationFrame( this.updateValue )
-	}
-
-	private buildInteract()
-	{
-		const left = el( `span.left` )
-
-		const hand = el( `span.hand` )
-
-		const right = el( `span.right` )
-
-		setChildren( this.interactInner, [ left, hand, right ] )
+		requestAnimationFrame( this.flipflop )
 	}
 
 	public setValue( value: number ): void
 	{
 		this.value = value
+	}
 
-		this.valueEl.textContent = `${value}`
+	private renderCanvas()
+	{
+		if ( !this.context2D || this.imageLoaded === ImageLoaded.notLoaded )
+		{
+			requestAnimationFrame( this.renderCanvas )
+			
+			return
+		}
+		// canvas height 96
+		// max-width 384 (change on resize)
+
+		/**
+		 * clear
+		 */
+
+		this.context2D.clearRect( 0, 0, this.canvas.width, this.canvas.height )
+
+		/**
+		 * Draw interactive area
+		 */
+
+		this.context2D.globalAlpha = 100 / 255
+
+		this.context2D.fillStyle = `#000000`
+
+		this.context2D.fillRect( 0, 30, this.canvas.width, this.canvas.height - 30 )
+
+		const percent = this.canvas.width * 0.01
+
+		const left = this.increment / this.maxIncrement * ( percent * 15 )
+
+		const blockSize = this.canvas.width * 0.2
+
+		const blocks = [ blockSize * 2, blockSize, blockSize * 2 ]
+
+		/**
+		 * Draw hand
+		 */
+
+		this.context2D.drawImage( 
+			this.img, 
+			blocks[ 0 ] + ( blocks[ 1 ] * 0.5 ) - ( 38 * 0.5 ) + left, 
+			this.canvas.height - 38 )
+
+		/**
+		 * Draw left arrows
+		 */
+
+		this.context2D.font = `57px "Courier New", Courier, monospace`
+
+		this.context2D.fillStyle = `#8c9daa`
+
+		const arrowsTop = ( ( this.canvas.height - 30 ) * 0.5 ) + ( this.arrowHeight * 0.5 ) + 30
+
+		this.context2D.fillText( 
+			this.leftArrows, 
+			blocks[ 0 ] - this.arrowWidth + left, 
+			arrowsTop )
+
+		/**
+		 * Draw right arrows
+		 */
+
+		this.context2D.font = `57px "Courier New", Courier, monospace`
+
+		this.context2D.fillStyle = `#8c9daa`
+
+		this.context2D.fillText( 
+			this.rightArrows, 
+			blocks[ 0 ] + blocks[ 1 ] + left, 
+			arrowsTop )
+
+		/**
+		 * Draw numbers
+		 */
+
+		this.context2D.globalAlpha = 1
+
+		this.context2D.fillStyle = `#0a0a0a`
+
+		this.context2D.fillRect( 0, 0, this.canvas.width, 30 )
+
+		this.context2D.font = `18px "Courier New", Courier, monospace`
+
+		this.context2D.fillStyle = `#8c9daa`
+
+		this.context2D.fillText( `${this.value}`, 0, 22 )
 	}
 }
