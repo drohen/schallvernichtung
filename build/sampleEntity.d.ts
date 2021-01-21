@@ -13,7 +13,7 @@ export declare enum SampleUINodeID {
 }
 export interface SampleEntity extends Entity {
     isSampleEntity: true;
-    onSampleCreated: (sampleID: string) => void;
+    onSampleCreated: (sampleID: string, label: string) => void;
     onSampleStateChanged: (sampleID: string, state: SampleState, previous: SampleState) => void;
     onSampleSelectedChanged: (sampleID: string) => void;
     onSampleNodeValueChange: (sampleID: string, nodeID: SampleUINodeID, value: number) => void;

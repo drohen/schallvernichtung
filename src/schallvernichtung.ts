@@ -6,7 +6,6 @@ import { SampleNode } from "./sampleNode"
 import { ContextNode } from "./contextNode"
 import { MathUtility } from "./mathUtility"
 import { UILayout, UILayoutHandler } from "./uiLayout"
-import { ResizeHandler } from "./resizeHandler"
 
 export class Schallvernichtung 
 implements
@@ -21,8 +20,6 @@ implements
 	private recordingHandler: RecordingHandler
 
 	private sampleHandler: SampleHandler
-
-	private resizeHandler: ResizeHandler
 	
 	private _entities: Entity[]
 
@@ -45,8 +42,6 @@ implements
 		this.recordingHandler = new RecordingHandler( this, this.contextNode, workerPath, chunkSize, recordLength )
 
 		this.sampleHandler = new SampleHandler( this )
-
-		this.resizeHandler = new ResizeHandler( this )
 
 		this.mathUtility = new MathUtility()
 

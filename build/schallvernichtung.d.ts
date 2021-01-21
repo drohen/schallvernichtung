@@ -7,7 +7,6 @@ export declare class Schallvernichtung implements RecordingSystemCoreProvider, S
     private contextNode;
     private recordingHandler;
     private sampleHandler;
-    private resizeHandler;
     private _entities;
     private mathUtility;
     private ui;

@@ -7,7 +7,6 @@ import type { SampleHandler } from "./sampleHandler"
 import type { RecordingHandler } from "./recordingHandler"
 import type { MathUtility } from "./mathUtility"
 import type { Entity } from "./entity"
-import { ImageHandler, ImageProvider } from "./uiImages"
 
 export interface UILayoutHandler extends UISampleCoreProvider
 {
@@ -16,7 +15,7 @@ export interface UILayoutHandler extends UISampleCoreProvider
 	addEntity: ( entity: Entity ) => void
 }
 
-export class UILayout implements SampleEntity, ImageHandler
+export class UILayout implements SampleEntity
 {
 	public isSampleEntity: true
 
@@ -29,12 +28,6 @@ export class UILayout implements SampleEntity, ImageHandler
 	private sampleList: UISampleSelect
 
 	private recordBtn: UIRecordBtn
-
-	private images: ImageProvider
-
-	private bg: HTMLCanvasElement
-
-	private bgContext: CanvasRenderingContext2D
 
 	constructor(
 		public id: string,
@@ -55,32 +48,15 @@ export class UILayout implements SampleEntity, ImageHandler
 
 		this.baseEl = el( `div.base` )
 
-		this.bg = el( `canvas.bg` ) as HTMLCanvasElement
-
-		const bgCtx = this.bg.getContext( `2d` )
-
-		if ( !bgCtx )
-		{
-			throw Error( `No background context` )
-		}
-
-		this.bgContext = bgCtx
-
-		this.onMushImageLoaded = this.onMushImageLoaded.bind( this )
-
-		this.onHandImageLoaded = this.onHandImageLoaded.bind( this )
-
-		this.images = new ImageProvider( this )
-
 		mount( root, outer )
 
-		setChildren( outer, [ this.bg, this.baseEl ] )
+		mount( outer, this.baseEl )
 
 		this.sampleBlocks = []
 
 		this.samplesMount = el( `div.samplesMount` )
 
-		this.sampleList = new UISampleSelect( this.handler.createID(), sampleHandler, this.images )
+		this.sampleList = new UISampleSelect( this.handler.createID(), sampleHandler )
 
 		this.handler.addEntity( this.sampleList )
 
@@ -144,34 +120,15 @@ export class UILayout implements SampleEntity, ImageHandler
 		mount( this.baseEl, this.wrap( [ this.samplesMount, this.sampleList ], undefined, `sampleManager` ) )
 	}
 
-	private drawBg()
-	{
-		this.bgContext.drawImage(
-			this.images.mushImg(),
-			0,
-			0,
-			this.bg.width * 0.5,
-			this.bg.height
-		)
-
-		this.bgContext.drawImage(
-			this.images.mushImg(),
-			this.bg.width * 0.5,
-			0,
-			this.bg.width * 0.5,
-			this.bg.height
-		)
-	}
-
-	public onSampleCreated( sampleID: string ): void
+	public onSampleCreated( sampleID: string, label: string ): void
 	{
 		const block = new UISample( 
 			this.handler.createID(), 
 			sampleID, 
-			this.sampleHandler, 
+			this.sampleHandler,
+			label,
 			this.handler, 
-			this.mathUtility, 
-			this.images )
+			this.mathUtility )
 
 		this.handler.addEntity( block )
 
@@ -198,18 +155,5 @@ export class UILayout implements SampleEntity, ImageHandler
 	public onSampleError( error: Error ): void
 	{
 		// handle error
-	}
-
-	public onMushImageLoaded(): void
-	{
-		this.drawBg()
-	}
-
-	public onHandImageLoaded(): void
-	{
-		for( const block of this.sampleBlocks )
-		{
-			block.loadHand()
-		}
 	}
 }
