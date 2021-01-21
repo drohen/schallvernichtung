@@ -5,16 +5,16 @@
 	--schall-dark-100: #050505;
 	--schall-dark-200: #0a0a0a;
 	--schall-off-white: #8c9daa;
-	--schall-blood-100: #200000;
 	--schall-base-size: 18px;
 	--schall-base-font: 'Courier New', Courier, monospace;
 }
 
 .schallvernichtung
 {
-	background: var(--schall-blood-100);
+	background: rgb(21, 23, 33);
 	min-height:100%;
 	position: relative;
+	height: 100%;
 }
 
 .schallvernichtung *
@@ -37,20 +37,10 @@
 	font-family: var(--schall-base-font);
 }
 
-.schallvernichtung .bg 
-{
-	min-height:100%;
-	width: 100%;
-	position: absolute;
-	background-size: 50% 100%;
-	opacity: 0.15;
-	max-width: none;
-	margin: 0;
-}
-
 .schallvernichtung .base
 {
 	min-height:100%;
+	height: 100%;
 	width: 100%;
 	position: relative;
 	display: grid;
@@ -64,6 +54,7 @@
 {
 	padding: 1rem;
 	border: 6px solid var(--schall-dark-100);
+	box-shadow: 0px 0px 1px white inset;
 }
 
 .schallvernichtung .sampleManager
@@ -74,13 +65,14 @@
 
 .schallvernichtung .samplesMount
 {
-	padding: 1rem;
 	border: 6px solid var(--schall-dark-100);
+	box-shadow: 0px 0px 1px white inset;
 }
 
 .schallvernichtung .sampleSelect
 {
 	border: 6px solid var(--schall-dark-100);
+	box-shadow: 0px 0px 1px white inset;
 }
 
 .schallvernichtung .labelButton
@@ -92,7 +84,8 @@
 
 .schallvernichtung .labelButton p,
 .schallvernichtung .sampleItem p,
-.schallvernichtung .rangeChange p
+.schallvernichtung .rangeChange p,
+.schallvernichtung .samplesMount p.sampleLabel
 {
 	margin: 0;
 	width: 100%;
@@ -108,7 +101,8 @@
 
 .schallvernichtung .labelButton p::before,
 .schallvernichtung .sampleItem p::before,
-.schallvernichtung .rangeChange p::before
+.schallvernichtung .rangeChange p::before,
+.schallvernichtung .samplesMount p.sampleLabel::before
 {
 	position: absolute;
 	content: '';
@@ -117,54 +111,59 @@
 	right: 0;
 	height: 2rem;
 	background: var(--schall-dark-200);
+	box-shadow: 0px 0px 1px white inset;
 	z-index: 1;
 }
 
 .schallvernichtung .labelButton p span,
 .schallvernichtung .sampleItem p span,
-.schallvernichtung .rangeChange p span
+.schallvernichtung .rangeChange p span,
+.schallvernichtung .samplesMount p.sampleLabel span
 {
 	display: inline;
 	color: var(--schall-off-white);
 	padding: 0.3rem 0;
 	background: var(--schall-dark-200);
+	box-shadow: -1px 0px 1px var(--schall-off-white);
 	z-index: 2;
 	position: relative;
 	white-space: break-spaces;
 	word-break: break-all;
 }
 
-.schallvernichtung .labelButton button
+.schallvernichtung .labelButton button,
+.schallvernichtung .rangeBtns button
 {
 	border: none;
-	background: rgba(47, 0, 0, 0.59);
+	background: var(--schall-dark-200);
 	padding: 0.5rem;
 	font-size: 1rem;
 	border-left: 1px solid var(--schall-dark-100);
 	border-right: 1px solid var(--schall-dark-100);
 	border-top: 0px solid transparent;
-	border-bottom: 6px solid var(--schall-dark-100);
+	border-bottom: 2px solid var(--schall-dark-100);
 	width: 98%;
 	height: 45px;
 	border-bottom-left-radius: 8px;
 	border-bottom-right-radius: 8px;
-	box-shadow: 0 -1px 0 var(--schall-dark-100);
+	box-shadow: 0 -1px 0 var(--schall-dark-100), 0px 0px 1px white inset;
 	font-family: var(--schall-base-font);
 	text-align: center;
 	cursor: pointer;
-	transition: background 80ms linear, color 80ms linear, border-bottom-width 30ms linear, border-top-width 30ms linear;
 }
 
-.schallvernichtung .labelButton button:hover
+.schallvernichtung .labelButton button:hover,
+.schallvernichtung .rangeBtns button:hover
 {
-	background: rgb(60,0,0,0.7);
-	color: #ccc;
+	background: rgb(77, 77, 77);
+	color: var(--schall-dark-200);
 }
 
 .schallvernichtung .labelButton button:active,
-.schallvernichtung .labelButton.down button
+.schallvernichtung .labelButton.down button,
+.schallvernichtung .rangeBtns button:active
 {
-	background: rgb(80,0,0,0.9);
+	background: rgb(19, 19, 19);
 	color: #ccc;
 	border-bottom-width: 2px;
 	border-top-width: 4px;
@@ -175,9 +174,15 @@
 	display: none;
 }
 
+.schallvernichtung .playBtn
+{
+	margin: 1rem 1rem 0;
+}
+
 .schallvernichtung .sampleItem
 {
 	border-bottom: 6px solid var(--schall-dark-100);
+	box-shadow: 0px 0px 1px white inset;
 	padding: 1rem;
 	cursor: pointer;
 	position: relative;
@@ -199,22 +204,31 @@
 .schallvernichtung .sampleItem.playing span::before
 {
 	content: "o))) ";
-	animation: 2s linear infinite schall-sound;
-}
-
-@keyframes schall-sound 
-{ 
-	0% { content: 'o    '; } 
-	20% { content: 'o)   '; }
-	60% { content: 'o))  '; }
-	80% { content: 'o))) '; }
 }
 
 .schallvernichtung .rangeChange
 {
-	margin: 1rem 0 2rem;
-	width: calc(100% - 1rem);
+	padding: 0 1rem;
+	margin: 1rem 0;
+	width: calc(100% - 2.5rem);
 	max-width: 24rem;
 	overflow: hidden;
 	cursor: pointer;
+}
+
+.schallvernichtung .rangeValue
+{
+	background: var(--schall-dark-200);
+	color: var(--schall-off-white);
+	box-shadow: 0px 0px 1px white inset;
+}
+
+.schallvernichtung .rangeBtns
+{
+	display: flex;
+}
+
+.schallvernichtung .rangeBtns button
+{
+	flex: 1;
 }

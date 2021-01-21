@@ -62,6 +62,8 @@ export class SampleHandler implements UISampleHandler, SampleSelectHandler
 	{
 		this.state[ sampleID ] = SampleState.notStarted
 
-		this.emit( entity => entity.onSampleCreated( sampleID ) )
+		const label = `Sample ${( new Date() ).toUTCString()}`
+
+		this.emit( entity => entity.onSampleCreated( sampleID, label ) )
 	}
 }
