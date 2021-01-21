@@ -1,7 +1,7 @@
 import type { SampleNodeMathProvider } from "./sampleNode"
-import type { UISampleCoreProvider } from "./uiSample"
+import type { UISampleMathProvider } from "./uiSample"
 
-export class MathUtility implements UISampleCoreProvider, SampleNodeMathProvider
+export class MathUtility implements UISampleMathProvider, SampleNodeMathProvider
 {
 	private logRange( position: number, min: number, max: number, findPosition?: boolean ): number
 	{

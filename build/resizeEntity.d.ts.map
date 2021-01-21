@@ -1,0 +1,1 @@
+{"version":3,"file":"resizeEntity.d.ts","sourceRoot":"","sources":["../src/resizeEntity.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,MAAM,EAAE,MAAM,UAAU,CAAA;AAEtC,MAAM,WAAW,YAAa,SAAQ,MAAM;IAE3C,cAAc,EAAE,IAAI,CAAA;IAEpB,QAAQ,EAAE,CAAE,KAAK,EAAE,MAAM,EAAE,MAAM,EAAE,MAAM,KAAM,IAAI,CAAA;CACnD"}

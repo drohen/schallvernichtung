@@ -1,11 +1,18 @@
 import { RedomComponent } from "redom";
+import type { ResizeEntity } from "./resizeEntity";
 export interface UIRangeNodeHandler<T> {
     onUIRangeChange: (id: T, value: number) => void;
 }
-export declare class UIRange<T> implements RedomComponent {
-    private id;
+export interface UIRangeImageProvider {
+    handImg: () => HTMLImageElement;
+}
+export declare class UIRange<T> implements RedomComponent, ResizeEntity {
+    id: string;
+    private type;
     private handler;
+    private imgProvider;
     el: HTMLElement;
+    isResizeEntity: true;
     private labelEl;
     private canvas;
     private context2D;
@@ -17,13 +24,12 @@ export declare class UIRange<T> implements RedomComponent {
     private maxValue;
     private state;
     private startX;
-    private img;
     private leftArrows;
     private rightArrows;
     private arrowWidth;
     private arrowHeight;
-    private imageLoaded;
-    constructor(id: T, handler: UIRangeNodeHandler<T>, label: string, init?: number);
+    constructor(id: string, type: T, handler: UIRangeNodeHandler<T>, imgProvider: UIRangeImageProvider, label: string, init?: number);
+    private setCanvasSize;
     private handleUp;
     private setCanvasEvents;
     private onDown;
@@ -31,7 +37,9 @@ export declare class UIRange<T> implements RedomComponent {
     private onDrag;
     private flipflop;
     private updateValue;
-    setValue(value: number): void;
     private renderCanvas;
+    update(): void;
+    setValue(value: number): void;
+    onResize(): void;
 }
 //# sourceMappingURL=uiRangeNode.d.ts.map

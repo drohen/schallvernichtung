@@ -1,8 +1,14 @@
 import { el, mount, RedomComponent } from "redom"
+import type { ResizeEntity } from "./resizeEntity"
 
 export interface UIRangeNodeHandler<T>
 {
 	onUIRangeChange: ( id: T, value: number ) => void
+}
+
+export interface UIRangeImageProvider
+{
+	handImg: () => HTMLImageElement
 }
 
 enum RangeState
@@ -14,15 +20,11 @@ enum RangeState
 	released
 }
 
-enum ImageLoaded
-{
-	notLoaded,
-	loaded
-}
-
-export class UIRange<T> implements RedomComponent
+export class UIRange<T> implements RedomComponent, ResizeEntity
 {
 	public el: HTMLElement
+
+	public isResizeEntity: true
 
 	private labelEl: HTMLSpanElement
 
@@ -46,8 +48,6 @@ export class UIRange<T> implements RedomComponent
 
 	private startX: number
 
-	private img: HTMLImageElement
-
 	private leftArrows: string
 
 	private rightArrows: string
@@ -56,11 +56,11 @@ export class UIRange<T> implements RedomComponent
 
 	private arrowHeight: number
 
-	private imageLoaded: ImageLoaded
-
 	constructor(
-		private id: T,
+		public id: string,
+		private type: T,
 		private handler: UIRangeNodeHandler<T>,
+		private imgProvider: UIRangeImageProvider,
 		label: string,
 		init = 1
 	)
@@ -68,6 +68,8 @@ export class UIRange<T> implements RedomComponent
 		this.value = init
 
 		this.el = el( `div.rangeChange` )
+
+		this.isResizeEntity = true
 
 		const labelP = el( `p` )
 
@@ -79,15 +81,11 @@ export class UIRange<T> implements RedomComponent
 
 		this.canvas = el( `canvas` ) as HTMLCanvasElement
 
-		this.canvas.width = 384
-
-		this.canvas.height = 96
-
 		const context = this.canvas.getContext( `2d` )
 
 		if ( !context )
 		{
-			throw Error( `No canvas context for ui range node ${this.id}` )
+			throw Error( `No canvas context for ui range node ${this.type}` )
 		}
 
 		this.context2D = context
@@ -105,17 +103,6 @@ export class UIRange<T> implements RedomComponent
 		this.arrowWidth = measure.width
 
 		this.arrowHeight = measure.actualBoundingBoxAscent
-
-		this.imageLoaded = ImageLoaded.notLoaded
-
-		this.img = new Image( 38, 38 )
-
-		this.img.onload = () =>
-		{
-			this.imageLoaded = ImageLoaded.loaded
-		}
-		
-		this.img.src = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAQAAAACNCElAAACgklEQVRIx82WS0iUURTH/6MyzWhgZY6LYCIbFMVHYWUQBD0hbBFWC3tZA2ktSpMWBTUF0fTYBNKmoo2LkISihRBEC7OFpE3tXEQPKMceRpQlPXT+nXu/mXFmyuab75tF/8PAHO7lN+eee+45AySrAj2l9NIhhk6UwIbWYqScvXzJQd7gYuIZFlmHbQNbaOgBfQRRaR3WCDbzu4Z94UoFq7AF28WfGjaSDdgOTmjYa66zD9vHiIYNs8Y+bA9/aNgo67IR2ZSGfeDybMAmNewNl9mHtUfr7AWXZiMyI2fjXG0ftp8xbVSwGjgRwHltx5Ere5zazMFao6VBblCw9wg3sonb1XdiEG0Ia+tGE8rTwnZHnxMlRiereSfq9fE2PXRJUV9jlZiHOIPT6NO2fqjqT1jD9AUoVcvjmoh7n1nLVXEvyBwWcqF8VMybGAoy14Dkw6/tcjJsi2x7FfeeSzSf4t43HuReWR1jgHNkn+/cFTfgxgCeOlhpZCUJFpauNh73vvJuwtovXuDNaIFvlSjB+yGgAJzHW/JLV3mIeTzAREWYXlPsZIHABq5rmDe+0MsuZqpRnlWwSJkc04VHHoZoXffkYmRirIFDpb8QLLUB0w2hLVYQHkj6rUs3hKIYrARSL0P2IvPGYLPQCilQaxrjEnXI/OnKL4bwrWmzSn7SdC1Gv4t+C6jHRtdLma55ODqXJ2SWf8wI1qBQHZid+siL0IVIDo9kBNOtqfbvLagF7MgA9UQN6ofwzfTH5a2X3SZvMcj5xDvUzdwemzFZz34TsIA6YA/K/tVr3dLxedEsbGe6OXAYvGQCdkrB/Olg7f8z7CSPsT7BViR5hr/ALMy0pcB+A9RSdD00vbpEAAAAAElFTkSuQmCC`
 
 		this.increment = 0
 
@@ -147,7 +134,20 @@ export class UIRange<T> implements RedomComponent
 
 		this.renderCanvas = this.renderCanvas.bind( this )
 
+		this.setCanvasSize = this.setCanvasSize.bind( this )
+
+		this.onResize = this.onResize.bind( this )
+
 		this.setCanvasEvents()
+
+		this.renderCanvas()
+	}
+
+	private setCanvasSize()
+	{
+		this.canvas.width = this.el.clientWidth
+
+		this.canvas.height = 96
 
 		this.renderCanvas()
 	}
@@ -293,7 +293,7 @@ export class UIRange<T> implements RedomComponent
 		}
 
 		this.handler.onUIRangeChange( 
-			this.id, 
+			this.type, 
 			Math.max( Math.min( this.value + this.increment, this.maxValue ), this.minValue ) )
 
 		this.renderCanvas()
@@ -301,22 +301,8 @@ export class UIRange<T> implements RedomComponent
 		requestAnimationFrame( this.flipflop )
 	}
 
-	public setValue( value: number ): void
-	{
-		this.value = value
-	}
-
 	private renderCanvas()
 	{
-		if ( !this.context2D || this.imageLoaded === ImageLoaded.notLoaded )
-		{
-			requestAnimationFrame( this.renderCanvas )
-			
-			return
-		}
-		// canvas height 96
-		// max-width 384 (change on resize)
-
 		/**
 		 * clear
 		 */
@@ -346,7 +332,7 @@ export class UIRange<T> implements RedomComponent
 		 */
 
 		this.context2D.drawImage( 
-			this.img, 
+			this.imgProvider.handImg(), 
 			blocks[ 0 ] + ( blocks[ 1 ] * 0.5 ) - ( 38 * 0.5 ) + left, 
 			this.canvas.height - 38 )
 
@@ -393,5 +379,20 @@ export class UIRange<T> implements RedomComponent
 		this.context2D.fillStyle = `#8c9daa`
 
 		this.context2D.fillText( `${this.value}`, 0, 22 )
+	}
+
+	public update(): void
+	{
+		this.renderCanvas()
+	}
+
+	public setValue( value: number ): void
+	{
+		this.value = value
+	}
+
+	public onResize(): void
+	{
+		this.setCanvasSize()
 	}
 }
