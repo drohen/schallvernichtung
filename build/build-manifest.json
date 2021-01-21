@@ -67,7 +67,7 @@
       "imports": []
     },
     "uiSampleSelect.js": {
-      "bytes": 1602,
+      "bytes": 5607,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -97,7 +97,7 @@
       ]
     },
     "uiRangeNode.js": {
-      "bytes": 4561,
+      "bytes": 6316,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -105,7 +105,7 @@
       ]
     },
     "uiSample.js": {
-      "bytes": 2776,
+      "bytes": 3435,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -132,8 +132,12 @@
         }
       ]
     },
+    "uiImages.js": {
+      "bytes": 15619,
+      "imports": []
+    },
     "uiLayout.js": {
-      "bytes": 2405,
+      "bytes": 3185,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -146,11 +150,18 @@
         },
         {
           "path": "uiRecordBtn.js"
+        },
+        {
+          "path": "uiImages.js"
         }
       ]
     },
+    "resizeHandler.js": {
+      "bytes": 867,
+      "imports": []
+    },
     "schallvernichtung.js": {
-      "bytes": 1486,
+      "bytes": 1586,
       "imports": [
         {
           "path": "recordingHandler.js"
@@ -172,6 +183,9 @@
         },
         {
           "path": "uiLayout.js"
+        },
+        {
+          "path": "resizeHandler.js"
         }
       ]
     }
@@ -214,10 +228,10 @@
           "bytesInOutput": 387
         },
         "web_modules/redom.js": {
-          "bytesInOutput": 5388
+          "bytesInOutput": 5394
         },
         "uiSampleSelect.js": {
-          "bytesInOutput": 939
+          "bytesInOutput": 3314
         },
         "uiButton.js": {
           "bytesInOutput": 2631
@@ -226,22 +240,28 @@
           "bytesInOutput": 458
         },
         "uiRangeNode.js": {
-          "bytesInOutput": 3079
+          "bytesInOutput": 4424
         },
         "uiSample.js": {
-          "bytesInOutput": 1574
+          "bytesInOutput": 2093
         },
         "uiRecordBtn.js": {
           "bytesInOutput": 1723
         },
+        "uiImages.js": {
+          "bytesInOutput": 15465
+        },
         "uiLayout.js": {
-          "bytesInOutput": 1322
+          "bytesInOutput": 1889
+        },
+        "resizeHandler.js": {
+          "bytesInOutput": 621
         },
         "schallvernichtung.js": {
-          "bytesInOutput": 718
+          "bytesInOutput": 749
         }
       },
-      "bytes": 29373
+      "bytes": 50302
     }
   }
 }
