@@ -1,8 +1,14 @@
-import { el, mount, RedomComponent, setChildren } from "redom"
+import { el, mount, RedomComponent } from "redom"
+import type { ResizeEntity } from "./resizeEntity"
 
 export interface UIRangeNodeHandler<T>
 {
 	onUIRangeChange: ( id: T, value: number ) => void
+}
+
+export interface UIRangeImageProvider
+{
+	handImg: () => HTMLImageElement
 }
 
 enum RangeState
@@ -14,17 +20,17 @@ enum RangeState
 	released
 }
 
-export class UIRange<T> implements RedomComponent
+export class UIRange<T> implements RedomComponent, ResizeEntity
 {
 	public el: HTMLElement
 
+	public isResizeEntity: true
+
 	private labelEl: HTMLSpanElement
 
-	private valueEl: HTMLSpanElement
+	private canvas: HTMLCanvasElement
 
-	private interactEl: HTMLElement
-
-	private interactInner: HTMLElement
+	private context2D: CanvasRenderingContext2D
 
 	private value: number
 
@@ -42,9 +48,19 @@ export class UIRange<T> implements RedomComponent
 
 	private startX: number
 
+	private leftArrows: string
+
+	private rightArrows: string
+
+	private arrowWidth: number
+
+	private arrowHeight: number
+
 	constructor(
-		private id: T,
+		public id: string,
+		private type: T,
 		private handler: UIRangeNodeHandler<T>,
+		private imgProvider: UIRangeImageProvider,
 		label: string,
 		init = 1
 	)
@@ -52,6 +68,8 @@ export class UIRange<T> implements RedomComponent
 		this.value = init
 
 		this.el = el( `div.rangeChange` )
+
+		this.isResizeEntity = true
 
 		const labelP = el( `p` )
 
@@ -61,23 +79,30 @@ export class UIRange<T> implements RedomComponent
 
 		mount( this.el, labelP )
 
-		const valueP = el( `p` )
+		this.canvas = el( `canvas` ) as HTMLCanvasElement
 
-		this.valueEl = el( `span`, `${init}` )
+		const context = this.canvas.getContext( `2d` )
 
-		mount( valueP, this.valueEl )
+		if ( !context )
+		{
+			throw Error( `No canvas context for ui range node ${this.type}` )
+		}
 
-		mount( this.el, valueP )
+		this.context2D = context
+		
+		mount( this.el, this.canvas )
 
-		this.interactEl = el( `div.rangeInteract` )
+		this.context2D.font = `57px "Courier New", Courier, monospace`
 
-		this.interactInner = el( `div.rangeInteractInner` )
+		this.leftArrows = `‹‹‹‹‹‹‹‹‹`
 
-		mount( this.interactEl, this.interactInner )
+		this.rightArrows = `›››››››››`
 
-		mount( this.el, this.interactEl )
+		const measure = this.context2D.measureText( this.leftArrows )
 
-		this.buildInteract()
+		this.arrowWidth = measure.width
+
+		this.arrowHeight = measure.actualBoundingBoxAscent
 
 		this.increment = 0
 
@@ -105,7 +130,26 @@ export class UIRange<T> implements RedomComponent
 
 		this.setValue = this.setValue.bind( this )
 
-		this.setEvents()
+		this.flipflop = this.flipflop.bind( this )
+
+		this.renderCanvas = this.renderCanvas.bind( this )
+
+		this.setCanvasSize = this.setCanvasSize.bind( this )
+
+		this.onResize = this.onResize.bind( this )
+
+		this.setCanvasEvents()
+
+		this.renderCanvas()
+	}
+
+	private setCanvasSize()
+	{
+		this.canvas.width = this.el.clientWidth
+
+		this.canvas.height = 96
+
+		this.renderCanvas()
 	}
 
 	private handleUp()
@@ -117,9 +161,9 @@ export class UIRange<T> implements RedomComponent
 		this.onUp()
 	}
 
-	private setEvents()
+	private setCanvasEvents()
 	{
-		this.interactEl.addEventListener( `mousedown`, event =>
+		this.canvas.addEventListener( `mousedown`, event =>
 		{
 			window.addEventListener( `mouseup`, this.handleUp )
 
@@ -128,7 +172,7 @@ export class UIRange<T> implements RedomComponent
 			this.onDown( event.clientX )
 		} )
 
-		this.interactEl.addEventListener( `touchstart`, event =>
+		this.canvas.addEventListener( `touchstart`, event =>
 		{
 			window.addEventListener( `mouseup`, this.handleUp )
 
@@ -137,7 +181,7 @@ export class UIRange<T> implements RedomComponent
 			this.onDown( event.touches[ 0 ].clientX )
 		} )
 
-		this.interactEl.addEventListener( `mousemove`, event =>
+		this.canvas.addEventListener( `mousemove`, event =>
 		{
 			event.preventDefault()
 
@@ -146,7 +190,7 @@ export class UIRange<T> implements RedomComponent
 			this.onDrag( event.clientX )
 		} )
 
-		this.interactEl.addEventListener( `touchmove`, event =>
+		this.canvas.addEventListener( `touchmove`, event =>
 		{
 			event.preventDefault()
 
@@ -175,9 +219,7 @@ export class UIRange<T> implements RedomComponent
 
 		this.startX = 0
 
-		this.interactInner.removeAttribute( `data-left` )
-
-		this.interactInner.removeAttribute( `style` )
+		this.renderCanvas()
 	}
 
 	private onDrag( position: number )
@@ -191,9 +233,9 @@ export class UIRange<T> implements RedomComponent
 
 		if ( this.state !== RangeState.slide ) return
 
-		const w = this.interactEl.clientWidth
+		const { width } = this.canvas
 
-		if ( position > w || position < 0 ) return
+		if ( position > width || position < 0 ) return
 
 		// starting point anywhere from mid to opposite side of direction
 		// means 0 is start, 50% of width move is 1000 increment
@@ -214,21 +256,26 @@ export class UIRange<T> implements RedomComponent
 			return
 		}
 
-		const mid = this.interactEl.clientWidth * 0.5
+		const mid = width * 0.5
 
 		const limit = direction === -1
 			? this.startX < mid
 				? this.startX / mid * ( this.maxIncrement + this.minIncrement )
 				: ( this.maxIncrement + this.minIncrement )
 			: this.startX > mid
-				? ( this.interactEl.clientWidth - this.startX ) / mid * ( this.maxIncrement + this.minIncrement )
+				? ( width - this.startX ) / mid * ( this.maxIncrement + this.minIncrement )
 				: ( this.maxIncrement + this.minIncrement )
 
 		const d = direction === -1
 			? ( ( position - this.startX ) / this.startX )
-			: ( ( position - this.startX ) / ( this.interactEl.clientWidth - this.startX ) )
+			: ( ( position - this.startX ) / ( width - this.startX ) )
 
 		this.increment = d * limit - this.minIncrement
+	}
+
+	private flipflop()
+	{
+		requestAnimationFrame( this.updateValue )
 	}
 	
 	private updateValue()
@@ -246,33 +293,106 @@ export class UIRange<T> implements RedomComponent
 		}
 
 		this.handler.onUIRangeChange( 
-			this.id, 
+			this.type, 
 			Math.max( Math.min( this.value + this.increment, this.maxValue ), this.minValue ) )
 
-		const left = this.increment / this.maxIncrement
+		this.renderCanvas()
 
-		this.interactInner.setAttribute( `data-left`, `${left}` )
-
-		this.interactInner.style.left = `${-15 + ( 15 * left )}%`
-
-		requestAnimationFrame( this.updateValue )
+		requestAnimationFrame( this.flipflop )
 	}
 
-	private buildInteract()
+	private renderCanvas()
 	{
-		const left = el( `span.left` )
+		/**
+		 * clear
+		 */
 
-		const hand = el( `span.hand` )
+		this.context2D.clearRect( 0, 0, this.canvas.width, this.canvas.height )
 
-		const right = el( `span.right` )
+		/**
+		 * Draw interactive area
+		 */
 
-		setChildren( this.interactInner, [ left, hand, right ] )
+		this.context2D.globalAlpha = 100 / 255
+
+		this.context2D.fillStyle = `#000000`
+
+		this.context2D.fillRect( 0, 30, this.canvas.width, this.canvas.height - 30 )
+
+		const percent = this.canvas.width * 0.01
+
+		const left = this.increment / this.maxIncrement * ( percent * 15 )
+
+		const blockSize = this.canvas.width * 0.2
+
+		const blocks = [ blockSize * 2, blockSize, blockSize * 2 ]
+
+		/**
+		 * Draw hand
+		 */
+
+		this.context2D.drawImage( 
+			this.imgProvider.handImg(), 
+			blocks[ 0 ] + ( blocks[ 1 ] * 0.5 ) - ( 38 * 0.5 ) + left, 
+			this.canvas.height - 38 )
+
+		/**
+		 * Draw left arrows
+		 */
+
+		this.context2D.font = `57px "Courier New", Courier, monospace`
+
+		this.context2D.fillStyle = `#8c9daa`
+
+		const arrowsTop = ( ( this.canvas.height - 30 ) * 0.5 ) + ( this.arrowHeight * 0.5 ) + 30
+
+		this.context2D.fillText( 
+			this.leftArrows, 
+			blocks[ 0 ] - this.arrowWidth + left, 
+			arrowsTop )
+
+		/**
+		 * Draw right arrows
+		 */
+
+		this.context2D.font = `57px "Courier New", Courier, monospace`
+
+		this.context2D.fillStyle = `#8c9daa`
+
+		this.context2D.fillText( 
+			this.rightArrows, 
+			blocks[ 0 ] + blocks[ 1 ] + left, 
+			arrowsTop )
+
+		/**
+		 * Draw numbers
+		 */
+
+		this.context2D.globalAlpha = 1
+
+		this.context2D.fillStyle = `#0a0a0a`
+
+		this.context2D.fillRect( 0, 0, this.canvas.width, 30 )
+
+		this.context2D.font = `18px "Courier New", Courier, monospace`
+
+		this.context2D.fillStyle = `#8c9daa`
+
+		this.context2D.fillText( `${this.value}`, 0, 22 )
+	}
+
+	public update(): void
+	{
+		this.renderCanvas()
 	}
 
 	public setValue( value: number ): void
 	{
 		this.value = value
+	}
 
-		this.valueEl.textContent = `${value}`
+	public onResize(): void
+	{
+		this.setCanvasSize()
 	}
 }
