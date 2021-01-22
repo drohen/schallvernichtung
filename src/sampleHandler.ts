@@ -1,7 +1,7 @@
 import type { SampleSelectHandler } from "./uiSampleSelect"
 import type { UISampleHandler } from "./uiSample"
 import type { Entity } from "./entity"
-import { SampleEntity, SampleState, SampleUINodeID } from "./sampleEntity"
+import { Sample, SampleEntity, SampleState, SampleUINodeID } from "./sampleEntity"
 
 export interface SampleSystemCoreProvider
 {
@@ -58,12 +58,10 @@ export class SampleHandler implements UISampleHandler, SampleSelectHandler
 		this.emit( entity => entity.onSampleStateChanged( sampleID, this.state[ sampleID ], previous ) )
 	}
 
-	public onSampleCreated( sampleID: string ): void
+	public onSampleCreated( sample: Sample ): void
 	{
-		this.state[ sampleID ] = SampleState.notStarted
+		this.state[ sample.id ] = SampleState.notStarted
 
-		const label = `Sample ${( new Date() ).toUTCString()}`
-
-		this.emit( entity => entity.onSampleCreated( sampleID, label ) )
+		this.emit( entity => entity.onSampleCreated( sample ) )
 	}
 }

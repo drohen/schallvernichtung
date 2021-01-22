@@ -1,5 +1,5 @@
 import { AudioNodeManager, AudioNodeManagerContext } from "./audioNodeExt"
-import { SampleEntity, SampleState, SampleUINodeID } from "./sampleEntity"
+import { Sample, SampleEntity, SampleState, SampleUINodeID } from "./sampleEntity"
 
 export interface SampleNodeAudioProvider
 {
@@ -13,6 +13,8 @@ export interface SampleNodeMathProvider
 
 export class SampleNode implements SampleEntity, AudioNodeManagerContext
 {
+	public id: string
+
 	public audioNodeManager: AudioNodeManager
 
 	public isAudioNodeManaged: true
@@ -34,13 +36,14 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 	private compressorFilterNode: DynamicsCompressorNode
 
 	constructor(
-		public id: string,
 		private core: SampleNodeAudioProvider,
 		private math: SampleNodeMathProvider,
-		data: Float32Array
+		sample: Sample
 	)
 	{
-		this.audioNodeManager = new AudioNodeManager( id )
+		this.id = sample.id
+
+		this.audioNodeManager = new AudioNodeManager( sample.id )
 
 		this.isAudioNodeManaged = true
 
@@ -52,15 +55,17 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 		 * Root node, no input connection
 		 */
 
-		const buffer = this.core.context().createBuffer( 1, data.length, this.core.context().sampleRate )
+		const buffer = this.core.context().createBuffer( 1, sample.data.length, this.core.context().sampleRate )
 
 		this.bufferNode = this.core.context().createBufferSource()
 
-		buffer.copyToChannel( data, 0 )
+		buffer.copyToChannel( sample.data, 0 )
 
 		this.bufferNode.buffer = buffer
 
 		this.bufferNode.loop = true
+
+		this.setSpeed( sample.speed )
 		
 
 		/**
@@ -69,10 +74,11 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 
 		this.volumeNode = this.core.context().createGain()
 
-		this.volumeNode.gain.setValueAtTime( this.math.exponentialValueInRange( 500001, 0, 3 ), this.core.context().currentTime )
+		this.setVolume( sample.volume )
 
 		this.audioNodeManager.setOutput( this.volumeNode )
 		
+
 		/**
 		 * Low pass filter
 		 */
@@ -82,6 +88,8 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 		this.lowpassFilterNode.frequency.value = 6000
 
 		this.lowpassFilterNode.type = `lowpass`
+
+		this.setLowpass( sample.lowpass )
 
 		this.lowpassFilterNode.connect( this.volumeNode )
 
@@ -100,6 +108,8 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 
 		this.distortionFilterNode.curve = this.distortionCurveData
 
+		this.setDistortion( sample.distortion )
+
 		this.distortionFilterNode.connect( this.lowpassFilterNode )
 
 
@@ -113,17 +123,19 @@ export class SampleNode implements SampleEntity, AudioNodeManagerContext
 
 		this.compressorFilterNode = this.core.context().createDynamicsCompressor()
 
+		this.setCompressor( sample.compressor )
+
 		this.compressorGainNode.connect( this.compressorFilterNode )
 
-		this.compressorFilterNode.threshold.setValueAtTime( -10, this.core.context().currentTime )
+		// this.compressorFilterNode.threshold.setValueAtTime( -10, this.core.context().currentTime )
 
-		this.compressorFilterNode.knee.setValueAtTime( 4, this.core.context().currentTime )
+		// this.compressorFilterNode.knee.setValueAtTime( 4, this.core.context().currentTime )
 
-		this.compressorFilterNode.ratio.setValueAtTime( 2, this.core.context().currentTime )
+		// this.compressorFilterNode.ratio.setValueAtTime( 2, this.core.context().currentTime )
 
-		this.compressorFilterNode.attack.setValueAtTime( 0, this.core.context().currentTime )
+		// this.compressorFilterNode.attack.setValueAtTime( 0, this.core.context().currentTime )
 
-		this.compressorFilterNode.release.setValueAtTime( 0.1, this.core.context().currentTime )
+		// this.compressorFilterNode.release.setValueAtTime( 0.1, this.core.context().currentTime )		
 
 		this.compressorFilterNode.connect( this.distortionFilterNode )
 	}

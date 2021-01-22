@@ -16,7 +16,7 @@ export interface UIRecordButtonHandler
 enum ButtonState
 {
 	error = `Reload context`,
-	noDevice = `Enable input device`,
+	noDevice = `Enable audio`,
 	requestingDevice = `Loading...`,
 	idle = `Hold down to record`,
 	stopRecording = `Stopping...`,

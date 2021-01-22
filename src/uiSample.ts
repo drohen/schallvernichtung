@@ -1,7 +1,7 @@
 import { el, mount, RedomComponent } from "redom"
 import { UISamplePlayBtn, UISamplePlayBtnHandler } from "./uiSamplePlayBtn"
 import { UIRange, UIRangeNodeHandler } from "./uiRangeNode"
-import { SampleEntity, SampleState, SampleUINodeID } from "./sampleEntity"
+import { Sample, SampleEntity, SampleState, SampleUINodeID } from "./sampleEntity"
 import type { Entity } from "./entity"
 
 enum Visibility
@@ -21,11 +21,6 @@ export interface UISampleCoreProvider
 {
 	addEntity: ( entity: Entity ) => void
 	createID: () => string
-}
-
-export interface UISampleMathProvider
-{
-	getPositionForLogRangeValue: ( value: number, min: number, max: number ) => number
 }
 
 export class UISample implements RedomComponent, UIRangeNodeHandler<SampleUINodeID>, SampleEntity
@@ -50,53 +45,50 @@ export class UISample implements RedomComponent, UIRangeNodeHandler<SampleUINode
 
 	private state: Visibility
 
+	private sampleID: string
+
 	constructor(
 		public id: string,
-		private sampleID: string,
 		private handler: UISampleHandler,
-		label: string,
 		core: UISampleCoreProvider,
-		math: UISampleMathProvider
+		sample: Sample
 	)
 	{
 		this.el = el( `div.hidden` )
 
 		this.isSampleEntity = true
 
+		this.sampleID = sample.id
+
 		const labelWrap = el( `p.sampleLabel` )
 
-		this.labelEl = el( `span`, label )
+		this.labelEl = el( `span`, sample.label )
 
 		mount( labelWrap, this.labelEl )
 
 		mount( this.el, labelWrap )
 
-		this.playBtn = new UISamplePlayBtn( sampleID, this.handler )
+		this.playBtn = new UISamplePlayBtn( this.sampleID, this.handler )
 
 		this.playBtn.el.el.classList.add( `playBtn` )
 
-		this.volumeCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.volume, this, `Volume`, 500001 )
+		this.volumeCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.volume, this, `Volume`, sample.volume )
 
 		core.addEntity( this.volumeCtrl )
 
-		this.lowpassCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.lowpass, this, `Filter` )
+		this.lowpassCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.lowpass, this, `Filter`, sample.lowpass )
 
 		core.addEntity( this.lowpassCtrl )
 
-		this.distortionCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.distortion, this, `Distortion` )
+		this.distortionCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.distortion, this, `Distortion`, sample.distortion )
 
 		core.addEntity( this.distortionCtrl )
 
-		this.compressorCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.compressor, this, `Compressor` )
+		this.compressorCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.compressor, this, `Compressor`, sample.compressor )
 
 		core.addEntity( this.compressorCtrl )
 
-		this.speedCtrl = new UIRange<SampleUINodeID>( 
-			core.createID(),
-			SampleUINodeID.speed, 
-			this,
-			`Speed`, 
-			math.getPositionForLogRangeValue( 1, 0.1, 3 ) )
+		this.speedCtrl = new UIRange<SampleUINodeID>( core.createID(), SampleUINodeID.speed, this, `Speed`, sample.speed )
 
 		core.addEntity( this.speedCtrl )
 
@@ -145,7 +137,7 @@ export class UISample implements RedomComponent, UIRangeNodeHandler<SampleUINode
 	public onSampleStateChanged( sampleID: string, state: SampleState ): void
 	{
 		if ( sampleID !== this.sampleID ) return
-
+		
 		this.playBtn.onStateChange( state )
 	}
 

@@ -1,5 +1,5 @@
 import { el, mount, RedomComponent } from "redom"
-import { SampleEntity, SampleState } from "./sampleEntity"
+import { Sample, SampleEntity, SampleState } from "./sampleEntity"
 
 export interface SampleSelectHandler
 {
@@ -69,26 +69,21 @@ export class UISampleSelect implements RedomComponent, SampleEntity
 		this.selectedID = sampleID
 	}
 
-	public onSampleNodeValueChange(): void
-	{
-		// do nothing
-	}
-
 	public onSampleError( error: Error ): void
 	{
 		// TODO: show err?
 	}
 
-	public onSampleCreated( sampleID: string, _label: string ): void
+	public onSampleCreated( sample: Sample ): void
 	{
-		if ( this.elements[ sampleID ] )
+		if ( this.elements[ sample.id ] )
 		{
-			throw Error( `Select list already contains sample ${sampleID}` )
+			throw Error( `Select list already contains sample ${sample.id}` )
 		}
 
 		const wrap = el( `div.sampleItem` )
 
-		const label = el( `span`, _label )
+		const label = el( `span`, sample.label )
 
 		const labelWrap = el( `p` )
 
@@ -100,11 +95,16 @@ export class UISampleSelect implements RedomComponent, SampleEntity
 		{
 			event.preventDefault()
 
-			this.handleClick( sampleID )
+			this.handleClick( sample.id )
 		} )
 
-		this.elements[ sampleID ] = wrap
+		this.elements[ sample.id ] = wrap
 
 		mount( this.el, wrap )
+	}
+
+	public onSampleNodeValueChange(): void
+	{
+		// Not used
 	}
 }

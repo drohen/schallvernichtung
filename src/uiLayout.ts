@@ -1,11 +1,10 @@
 import { el, mount, RedomComponent, setChildren } from "redom"
-import type { SampleEntity, SampleState } from "./sampleEntity"
+import type { Sample, SampleEntity } from "./sampleEntity"
 import { UISampleSelect } from "./uiSampleSelect"
 import { UISample, UISampleCoreProvider } from "./uiSample"
 import { UIRecordBtn } from "./uiRecordBtn"
 import type { SampleHandler } from "./sampleHandler"
 import type { RecordingHandler } from "./recordingHandler"
-import type { MathUtility } from "./mathUtility"
 import type { Entity } from "./entity"
 
 export interface UILayoutHandler extends UISampleCoreProvider
@@ -33,7 +32,6 @@ export class UILayout implements SampleEntity
 		public id: string,
 		private handler: UILayoutHandler,
 		private sampleHandler: SampleHandler,
-		private mathUtility: MathUtility,
 		mountSelector: string,
 		recordingHandler: RecordingHandler,
 		recordLength: number,
@@ -120,15 +118,13 @@ export class UILayout implements SampleEntity
 		mount( this.baseEl, this.wrap( [ this.samplesMount, this.sampleList ], undefined, `sampleManager` ) )
 	}
 
-	public onSampleCreated( sampleID: string, label: string ): void
+	public onSampleCreated( sample: Sample ): void
 	{
 		const block = new UISample( 
-			this.handler.createID(), 
-			sampleID, 
+			this.handler.createID(),
 			this.sampleHandler,
-			label,
-			this.handler, 
-			this.mathUtility )
+			this.handler,
+			sample )
 
 		this.handler.addEntity( block )
 
@@ -137,23 +133,23 @@ export class UILayout implements SampleEntity
 		mount( this.samplesMount, block )
 	}
 
-	public onSampleStateChanged( sampleID: string, state: SampleState, previous: SampleState ): void
-	{
-		// mute/unmute all button
-	}
-
-	public onSampleSelectedChanged( sampleID: string ): void
+	public onSampleSelectedChanged(): void
 	{
 		this.baseEl.scrollTo( 0, 0 )
-	}
-
-	public onSampleNodeValueChange(): void
-	{
-		// do nothing
 	}
 
 	public onSampleError( error: Error ): void
 	{
 		// handle error
+	}
+
+	public onSampleNodeValueChange(): void
+	{
+		// Not used
+	}
+
+	public onSampleStateChanged(): void
+	{
+		// Not used
 	}
 }

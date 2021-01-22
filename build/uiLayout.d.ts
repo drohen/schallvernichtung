@@ -1,8 +1,7 @@
-import type { SampleEntity, SampleState } from "./sampleEntity";
+import type { Sample, SampleEntity } from "./sampleEntity";
 import { UISampleCoreProvider } from "./uiSample";
 import type { SampleHandler } from "./sampleHandler";
 import type { RecordingHandler } from "./recordingHandler";
-import type { MathUtility } from "./mathUtility";
 import type { Entity } from "./entity";
 export interface UILayoutHandler extends UISampleCoreProvider {
     createID: () => string;
@@ -12,22 +11,21 @@ export declare class UILayout implements SampleEntity {
     id: string;
     private handler;
     private sampleHandler;
-    private mathUtility;
     isSampleEntity: true;
     private baseEl;
     private sampleBlocks;
     private samplesMount;
     private sampleList;
     private recordBtn;
-    constructor(id: string, handler: UILayoutHandler, sampleHandler: SampleHandler, mathUtility: MathUtility, mountSelector: string, recordingHandler: RecordingHandler, recordLength: number, cssPath: string);
+    constructor(id: string, handler: UILayoutHandler, sampleHandler: SampleHandler, mountSelector: string, recordingHandler: RecordingHandler, recordLength: number, cssPath: string);
     private addStylesheet;
     private getElOrThrow;
     private wrap;
     private setUI;
-    onSampleCreated(sampleID: string, label: string): void;
-    onSampleStateChanged(sampleID: string, state: SampleState, previous: SampleState): void;
-    onSampleSelectedChanged(sampleID: string): void;
-    onSampleNodeValueChange(): void;
+    onSampleCreated(sample: Sample): void;
+    onSampleSelectedChanged(): void;
     onSampleError(error: Error): void;
+    onSampleNodeValueChange(): void;
+    onSampleStateChanged(): void;
 }
 //# sourceMappingURL=uiLayout.d.ts.map
