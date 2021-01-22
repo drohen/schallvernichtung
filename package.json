@@ -1,6 +1,6 @@
 {
 	"name": "schallvernichtung",
-	"version": "3.5.0",
+	"version": "3.5.1",
 	"description": "record samples, loop them, crush them",
 	"main": "build/schallvernichtung.js",
 	"scripts": {

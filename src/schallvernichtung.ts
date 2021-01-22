@@ -34,7 +34,7 @@ implements
 
 	private cache: Cache
 
-	constructor( mountSelector: string, webWorkerPath: string, cssPath: string, serviceWorkerPath?: string )
+	constructor( mountSelector: string, webWorkerPath: string, cssPath: string, serviceWorkerPath?: string, additionalURLs: string[] = [] )
 	{
 		const recordLength = 10
 
@@ -71,15 +71,17 @@ implements
 
 		if ( serviceWorkerPath )
 		{
-			this.registerServiceWorker( this.createServiceWorkerPath( serviceWorkerPath, webWorkerPath, cssPath ) )
+			this.registerServiceWorker( this.createServiceWorkerPath( serviceWorkerPath, webWorkerPath, cssPath, additionalURLs ) )
 		}
 	}
 
-	private createServiceWorkerPath( serviceWorkerPath: string, webWorkerPath: string, cssPath: string )
+	private createServiceWorkerPath( serviceWorkerPath: string, webWorkerPath: string, cssPath: string, additionalURLs: string[] )
 	{
 		const path = new URL( serviceWorkerPath, window.location.origin )
 
-		path.searchParams.set( `paths`, JSON.stringify( [ window.location.pathname, import.meta.url, webWorkerPath, cssPath ] ) )
+		console.log( [ window.location.pathname, import.meta.url, webWorkerPath, cssPath, ...additionalURLs ] )
+
+		path.searchParams.set( `paths`, JSON.stringify( [ window.location.pathname, import.meta.url, webWorkerPath, cssPath, ...additionalURLs ] ) )
 
 		return path.toString()
 	}
