@@ -79,9 +79,7 @@ implements
 	{
 		const path = new URL( serviceWorkerPath, window.location.origin )
 
-		console.log( [ window.location.pathname, import.meta.url, webWorkerPath, cssPath, ...additionalURLs ] )
-
-		path.searchParams.set( `paths`, JSON.stringify( [ window.location.pathname, import.meta.url, webWorkerPath, cssPath, ...additionalURLs ] ) )
+		path.searchParams.set( `paths`, JSON.stringify( [ window.location.pathname, import.meta.url, webWorkerPath, serviceWorkerPath, cssPath, ...additionalURLs ] ) )
 
 		return path.toString()
 	}

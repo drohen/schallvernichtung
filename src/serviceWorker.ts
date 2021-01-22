@@ -39,7 +39,7 @@ class SchallvernichtungServiceWorker
 		const event = <FetchEvent>_event
 		
 		event.respondWith(
-			caches.match( event.request )
+			caches.match( event.request, { ignoreSearch: true } )
 				.then( matchResponse =>  matchResponse || fetch( event.request ) )
 				.then( fetchResponse => 
 					caches.open( SchallvernichtungServiceWorker.cacheName )

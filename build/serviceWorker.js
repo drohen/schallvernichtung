@@ -20,7 +20,7 @@ SchallvernichtungServiceWorker.onInstalled = (_event) => {
 };
 SchallvernichtungServiceWorker.onFetched = (_event) => {
   const event = _event;
-  event.respondWith(caches.match(event.request).then((matchResponse) => matchResponse || fetch(event.request)).then((fetchResponse) => caches.open(SchallvernichtungServiceWorker2.cacheName).then((cache) => ({cache, fetchResponse}))).then(({cache, fetchResponse}) => {
+  event.respondWith(caches.match(event.request, {ignoreSearch: true}).then((matchResponse) => matchResponse || fetch(event.request)).then((fetchResponse) => caches.open(SchallvernichtungServiceWorker2.cacheName).then((cache) => ({cache, fetchResponse}))).then(({cache, fetchResponse}) => {
     cache.put(event.request, fetchResponse.clone());
     return fetchResponse;
   }));
