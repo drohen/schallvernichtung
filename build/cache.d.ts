@@ -16,15 +16,16 @@ export declare class Cache implements SampleEntity, RecordingSystemHandler, Reco
     isRecordingEntity: true;
     private db;
     private baseSpeed;
+    private nodeDebounce;
     constructor(id: string, handler: CacheHandler, math: CacheMathProvider);
     private loadCache;
     onSampleNodeValueChange(sampleID: string, nodeID: SampleUINodeID, value: number): void;
     onRecorded(data: Float32Array): void;
     onRecordingStateChanged(state: RecordingState): void;
+    onRecordingError(error: Error): void;
     onSampleError(): void;
     onSampleSelectedChanged(): void;
     onSampleCreated(): void;
     onSampleStateChanged(): void;
-    onRecordingError(error: Error): void;
 }
 //# sourceMappingURL=cache.d.ts.map

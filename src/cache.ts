@@ -27,6 +27,8 @@ export class Cache implements SampleEntity, RecordingSystemHandler, RecordingEnt
 
 	private baseSpeed: number
 
+	private nodeDebounce: {[nodeID: string]: number}
+
 	constructor(
 		public id: string,
 		private handler: CacheHandler,
@@ -40,6 +42,8 @@ export class Cache implements SampleEntity, RecordingSystemHandler, RecordingEnt
 		this.db = new CacheSamplesDB()
 
 		this.baseSpeed = math.getPositionForLogRangeValue( 1, 0.1, 3 )
+
+		this.nodeDebounce = {}
 	}
 	
 	private loadCache(): void
@@ -57,11 +61,16 @@ export class Cache implements SampleEntity, RecordingSystemHandler, RecordingEnt
 
 	public onSampleNodeValueChange( sampleID: string, nodeID: SampleUINodeID, value: number ): void
 	{
-		this.db.samples.update( sampleID, { [ nodeID ]: value } )
-			.catch( () =>
-			{
-				// TODO: handle error
-			} )
+		clearInterval( this.nodeDebounce[ nodeID ] )
+
+		this.nodeDebounce[ nodeID ] = window.setTimeout( () =>
+		{
+			this.db.samples.update( sampleID, { [ nodeID ]: value } )
+				.catch( () =>
+				{
+					// TODO: handle error
+				} )
+		}, 500 )
 	}
 
 	public onRecorded( data: Float32Array ): void
@@ -97,6 +106,11 @@ export class Cache implements SampleEntity, RecordingSystemHandler, RecordingEnt
 		}
 	}
 
+	public onRecordingError( error: Error ): void
+	{
+		// TODO: Handle error?
+	}
+
 	public onSampleError(): void
 	{
 		// Not used
@@ -115,10 +129,5 @@ export class Cache implements SampleEntity, RecordingSystemHandler, RecordingEnt
 	public onSampleStateChanged(): void
 	{
 		// Not used
-	}
-
-	public onRecordingError( error: Error ): void
-	{
-		// TODO: Handle error?
 	}
 }
