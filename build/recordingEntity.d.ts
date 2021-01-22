@@ -2,12 +2,13 @@ import type { Entity } from "./entity";
 export declare enum RecordingState {
     noDevice = 0,
     requestingDevice = 1,
-    idle = 2,
-    starting = 3,
-    ready = 4,
-    recording = 5,
-    closing = 6,
-    error = 7
+    streamInitiated = 2,
+    idle = 3,
+    starting = 4,
+    ready = 5,
+    recording = 6,
+    closing = 7,
+    error = 8
 }
 export interface RecordingEntity extends Entity {
     isRecordingEntity: true;

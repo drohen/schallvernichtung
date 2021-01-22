@@ -1,5 +1,5 @@
 import { RedomComponent } from "redom";
-import { SampleEntity, SampleState } from "./sampleEntity";
+import { Sample, SampleEntity, SampleState } from "./sampleEntity";
 export interface SampleSelectHandler {
     onSampleSelected: (sampleID: string) => void;
 }
@@ -16,8 +16,8 @@ export declare class UISampleSelect implements RedomComponent, SampleEntity {
     private handleClick;
     onSampleStateChanged(sampleID: string, state: SampleState): void;
     onSampleSelectedChanged(sampleID: string): void;
-    onSampleNodeValueChange(): void;
     onSampleError(error: Error): void;
-    onSampleCreated(sampleID: string, _label: string): void;
+    onSampleCreated(sample: Sample): void;
+    onSampleNodeValueChange(): void;
 }
 //# sourceMappingURL=uiSampleSelect.d.ts.map

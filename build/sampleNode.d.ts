@@ -1,5 +1,5 @@
 import { AudioNodeManager, AudioNodeManagerContext } from "./audioNodeExt";
-import { SampleEntity, SampleState, SampleUINodeID } from "./sampleEntity";
+import { Sample, SampleEntity, SampleState, SampleUINodeID } from "./sampleEntity";
 export interface SampleNodeAudioProvider {
     context: () => AudioContext;
 }
@@ -7,9 +7,9 @@ export interface SampleNodeMathProvider {
     exponentialValueInRange: (position: number, min: number, max: number) => number;
 }
 export declare class SampleNode implements SampleEntity, AudioNodeManagerContext {
-    id: string;
     private core;
     private math;
+    id: string;
     audioNodeManager: AudioNodeManager;
     isAudioNodeManaged: true;
     isSampleEntity: true;
@@ -20,7 +20,7 @@ export declare class SampleNode implements SampleEntity, AudioNodeManagerContext
     private distortionCurveData;
     private compressorGainNode;
     private compressorFilterNode;
-    constructor(id: string, core: SampleNodeAudioProvider, math: SampleNodeMathProvider, data: Float32Array);
+    constructor(core: SampleNodeAudioProvider, math: SampleNodeMathProvider, sample: Sample);
     private curve;
     private ramp;
     private rampTime;

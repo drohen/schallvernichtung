@@ -5,11 +5,11 @@
       "imports": []
     },
     "recordingEntity.js": {
-      "bytes": 617,
+      "bytes": 696,
       "imports": []
     },
     "recordingHandler.js": {
-      "bytes": 5890,
+      "bytes": 6344,
       "imports": [
         {
           "path": "__snowpack__/env.js"
@@ -28,7 +28,7 @@
       "imports": []
     },
     "sampleHandler.js": {
-      "bytes": 1251,
+      "bytes": 1185,
       "imports": [
         {
           "path": "sampleEntity.js"
@@ -38,17 +38,6 @@
     "audioNodeExt.js": {
       "bytes": 2664,
       "imports": []
-    },
-    "sampleNode.js": {
-      "bytes": 5014,
-      "imports": [
-        {
-          "path": "audioNodeExt.js"
-        },
-        {
-          "path": "sampleEntity.js"
-        }
-      ]
     },
     "contextNode.js": {
       "bytes": 790,
@@ -105,7 +94,7 @@
       ]
     },
     "uiSample.js": {
-      "bytes": 3179,
+      "bytes": 3207,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -133,7 +122,7 @@
       ]
     },
     "uiLayout.js": {
-      "bytes": 2392,
+      "bytes": 2274,
       "imports": [
         {
           "path": "web_modules/redom.js"
@@ -149,8 +138,42 @@
         }
       ]
     },
+    "web_modules/dexie.js": {
+      "bytes": 178177,
+      "imports": []
+    },
+    "cacheSamplesDB.js": {
+      "bytes": 301,
+      "imports": [
+        {
+          "path": "web_modules/dexie.js"
+        }
+      ]
+    },
+    "cache.js": {
+      "bytes": 1327,
+      "imports": [
+        {
+          "path": "cacheSamplesDB.js"
+        },
+        {
+          "path": "recordingEntity.js"
+        }
+      ]
+    },
+    "sampleNode.js": {
+      "bytes": 4658,
+      "imports": [
+        {
+          "path": "audioNodeExt.js"
+        },
+        {
+          "path": "sampleEntity.js"
+        }
+      ]
+    },
     "schallvernichtung.js": {
-      "bytes": 1486,
+      "bytes": 1551,
       "imports": [
         {
           "path": "recordingHandler.js"
@@ -162,9 +185,6 @@
           "path": "sampleHandler.js"
         },
         {
-          "path": "sampleNode.js"
-        },
-        {
           "path": "contextNode.js"
         },
         {
@@ -172,6 +192,12 @@
         },
         {
           "path": "uiLayout.js"
+        },
+        {
+          "path": "cache.js"
+        },
+        {
+          "path": "sampleNode.js"
         }
       ]
     }
@@ -184,64 +210,73 @@
       ],
       "inputs": {
         "__snowpack__/env.js": {
-          "bytesInOutput": 55
+          "bytesInOutput": 56
         },
         "recordingEntity.js": {
-          "bytesInOutput": 244
+          "bytesInOutput": 285
         },
         "recordingHandler.js": {
-          "bytesInOutput": 3608
+          "bytesInOutput": 3873
         },
         "web_modules/nanoid.js": {
-          "bytesInOutput": 187
+          "bytesInOutput": 188
         },
         "sampleEntity.js": {
           "bytesInOutput": 249
         },
         "sampleHandler.js": {
-          "bytesInOutput": 687
+          "bytesInOutput": 646
         },
         "audioNodeExt.js": {
-          "bytesInOutput": 1887
-        },
-        "sampleNode.js": {
-          "bytesInOutput": 3716
+          "bytesInOutput": 1888
         },
         "contextNode.js": {
-          "bytesInOutput": 533
+          "bytesInOutput": 535
         },
         "mathUtility.js": {
-          "bytesInOutput": 387
+          "bytesInOutput": 388
         },
         "web_modules/redom.js": {
-          "bytesInOutput": 5388
+          "bytesInOutput": 5435
         },
         "uiSampleSelect.js": {
-          "bytesInOutput": 902
+          "bytesInOutput": 919
         },
         "uiButton.js": {
-          "bytesInOutput": 2631
+          "bytesInOutput": 2635
         },
         "uiSamplePlayBtn.js": {
-          "bytesInOutput": 458
+          "bytesInOutput": 468
         },
         "uiRangeNode.js": {
-          "bytesInOutput": 1719
+          "bytesInOutput": 1721
         },
         "uiSample.js": {
-          "bytesInOutput": 1836
+          "bytesInOutput": 1868
         },
         "uiRecordBtn.js": {
-          "bytesInOutput": 1723
+          "bytesInOutput": 1728
         },
         "uiLayout.js": {
-          "bytesInOutput": 1317
+          "bytesInOutput": 1274
+        },
+        "web_modules/dexie.js": {
+          "bytesInOutput": 72537
+        },
+        "cacheSamplesDB.js": {
+          "bytesInOutput": 199
+        },
+        "cache.js": {
+          "bytesInOutput": 795
+        },
+        "sampleNode.js": {
+          "bytesInOutput": 3339
         },
         "schallvernichtung.js": {
-          "bytesInOutput": 718
+          "bytesInOutput": 773
         }
       },
-      "bytes": 28278
+      "bytes": 101832
     }
   }
 }

@@ -2,17 +2,22 @@ import type { Entity } from "./entity"
 import { RecordingHandler, RecordingSystemCoreProvider } from "./recordingHandler"
 import { nanoid } from "nanoid"
 import { SampleHandler, SampleSystemCoreProvider } from "./sampleHandler"
-import { SampleNode } from "./sampleNode"
 import { ContextNode } from "./contextNode"
 import { MathUtility } from "./mathUtility"
 import { UILayout, UILayoutHandler } from "./uiLayout"
+import { Cache, CacheHandler } from "./cache"
+import type { Sample } from "./sampleEntity"
+import { SampleNode } from "./sampleNode"
 
-export class Schallvernichtung 
+export class Schallvernichtung
 implements
-	RecordingSystemCoreProvider,
 	SampleSystemCoreProvider,
-	UILayoutHandler
+	UILayoutHandler,
+	RecordingSystemCoreProvider,
+	CacheHandler
 {
+	public onCacheLoaded: () => void
+
 	private contextNodeID: string
 
 	private contextNode: ContextNode
@@ -27,6 +32,8 @@ implements
 
 	private ui: UILayout
 
+	private cache: Cache
+
 	constructor( mountSelector: string, workerPath: string, cssPath: string )
 	{
 		const recordLength = 10
@@ -39,23 +46,39 @@ implements
 
 		this._entities = []
 
-		this.recordingHandler = new RecordingHandler( this, this.contextNode, workerPath, chunkSize, recordLength )
+		this.mathUtility = new MathUtility()
+
+		this.cache = new Cache( this.createID(), this, this.mathUtility )
+
+		this.addEntity( this.cache )
+
+		this.recordingHandler = new RecordingHandler( this, this.contextNode, workerPath, chunkSize, recordLength, this.cache )
 
 		this.sampleHandler = new SampleHandler( this )
-
-		this.mathUtility = new MathUtility()
 
 		this.ui = new UILayout( 
 			this.createID(), 
 			this, 
-			this.sampleHandler, 
-			this.mathUtility, 
+			this.sampleHandler,
 			mountSelector, 
 			this.recordingHandler, 
 			recordLength,
 			cssPath )
 
 		this.addEntity( this.ui )
+
+		this.onCacheLoaded = this.recordingHandler.appReady
+	}
+
+	public emitSample( sample: Sample ): void
+	{
+		const node = new SampleNode( this.contextNode, this.mathUtility, sample )
+
+		this.addEntity( node )
+
+		node.audioNodeManager.connectOutput( this.contextNode )
+
+		this.sampleHandler.onSampleCreated( sample )
 	}
 
 	public addEntity( entity: Entity ): void
@@ -71,20 +94,5 @@ implements
 	public entities(): Entity[]
 	{
 		return this._entities
-	}
-
-	public onRecorded( data: Float32Array ): void
-	{
-		if ( data.length < this.contextNode.context().sampleRate * 0.2 ) return
-
-		const nodeID = this.createID()
-
-		const node = new SampleNode( nodeID, this.contextNode, this.mathUtility, data )
-
-		this.addEntity( node )
-
-		node.audioNodeManager.connectOutput( this.contextNode )
-
-		this.sampleHandler.onSampleCreated( nodeID )
 	}
 }

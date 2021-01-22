@@ -27,7 +27,10 @@ import type { AudioNodeManagerContext } from "./audioNodeExt"
 export interface RecordingSystemCoreProvider
 {
 	entities: () => Entity[]
+}
 
+export interface RecordingSystemHandler
+{
 	onRecorded: ( buffer: Float32Array ) => void
 }
 
@@ -72,7 +75,8 @@ export class RecordingHandler implements UIRecordButtonHandler
 		private audio: AudioContextProvider,
 		private workerPath: string,
 		private chunkSize: number,
-		private recordLength: number
+		private recordLength: number,
+		private handler: RecordingSystemHandler
 	)
 	{
 		this.mediaTracks = []
@@ -80,6 +84,8 @@ export class RecordingHandler implements UIRecordButtonHandler
 		this.state = RecordingState.noDevice
 
 		this.handleRecorderMessage = this.handleRecorderMessage.bind( this )
+
+		this.appReady = this.appReady.bind( this )
 
 		if ( this.audio.context().audioWorklet ) 
 		{
@@ -172,7 +178,10 @@ export class RecordingHandler implements UIRecordButtonHandler
 
 				this.emit( `state`, RecordingState.idle )
 
-				this.core.onRecorded( event.data.buffer )
+				if ( event.data.buffer.length >= this.audio.context().sampleRate * 0.2 )
+				{
+					this.handler.onRecorded( event.data.buffer )
+				}
 
 				break
 		}
@@ -215,10 +224,18 @@ export class RecordingHandler implements UIRecordButtonHandler
 
 				return true
 
+			case RecordingState.streamInitiated:
+
+				if ( this.state !== RecordingState.requestingDevice ) return false
+
+				this.state = RecordingState.streamInitiated
+
+				return true
+
 			case RecordingState.idle:
 
 				if ( this.state !== RecordingState.closing
-					&& this.state !== RecordingState.requestingDevice ) return false
+					&& this.state !== RecordingState.streamInitiated ) return false
 
 				this.state = RecordingState.idle
 
@@ -311,7 +328,7 @@ export class RecordingHandler implements UIRecordButtonHandler
 
 				return this.audio.handleStream( stream )
 			} )
-			.then( () => this.emit( `state`, RecordingState.idle ) )
+			.then( () => this.emit( `state`, RecordingState.streamInitiated ) )
 			.catch( ( error: Error ) => this.emit( `error`, undefined, error ) )
 	}
 
@@ -340,5 +357,10 @@ export class RecordingHandler implements UIRecordButtonHandler
 	public recordButtonOnRequest(): void
 	{
 		this.emit( `state`, RecordingState.requestingDevice )
+	}
+
+	public appReady(): void
+	{
+		this.emit( `state`, RecordingState.idle )
 	}
 }

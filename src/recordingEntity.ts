@@ -4,6 +4,7 @@ export enum RecordingState
 {
 	noDevice,
 	requestingDevice,
+	streamInitiated,
 	idle,
 	starting,
 	ready,

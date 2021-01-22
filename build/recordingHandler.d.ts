@@ -13,6 +13,8 @@ import type { AudioNodeManagerContext } from "./audioNodeExt";
  */
 export interface RecordingSystemCoreProvider {
     entities: () => Entity[];
+}
+export interface RecordingSystemHandler {
     onRecorded: (buffer: Float32Array) => void;
 }
 export interface AudioContextProvider {
@@ -31,11 +33,12 @@ export declare class RecordingHandler implements UIRecordButtonHandler {
     private workerPath;
     private chunkSize;
     private recordLength;
+    private handler;
     private recorderNode?;
     private mediaTracks;
     private recorder?;
     private state;
-    constructor(core: RecordingSystemCoreProvider, audio: AudioContextProvider, workerPath: string, chunkSize: number, recordLength: number);
+    constructor(core: RecordingSystemCoreProvider, audio: AudioContextProvider, workerPath: string, chunkSize: number, recordLength: number, handler: RecordingSystemHandler);
     private setRecorder;
     private unsetRecorder;
     private handleRecorderMessage;
@@ -49,5 +52,6 @@ export declare class RecordingHandler implements UIRecordButtonHandler {
     recordButtonOnStop(): void;
     recordButtonOnReload(): void;
     recordButtonOnRequest(): void;
+    appReady(): void;
 }
 //# sourceMappingURL=recordingHandler.d.ts.map
