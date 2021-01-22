@@ -34,7 +34,7 @@ implements
 
 	private cache: Cache
 
-	constructor( mountSelector: string, workerPath: string, cssPath: string )
+	constructor( mountSelector: string, webWorkerPath: string, cssPath: string, serviceWorkerPath?: string )
 	{
 		const recordLength = 10
 
@@ -52,7 +52,7 @@ implements
 
 		this.addEntity( this.cache )
 
-		this.recordingHandler = new RecordingHandler( this, this.contextNode, workerPath, chunkSize, recordLength, this.cache )
+		this.recordingHandler = new RecordingHandler( this, this.contextNode, webWorkerPath, chunkSize, recordLength, this.cache )
 
 		this.sampleHandler = new SampleHandler( this )
 
@@ -68,6 +68,32 @@ implements
 		this.addEntity( this.ui )
 
 		this.onCacheLoaded = this.recordingHandler.appReady
+
+		if ( serviceWorkerPath )
+		{
+			this.registerServiceWorker( this.createServiceWorkerPath( serviceWorkerPath, webWorkerPath, cssPath ) )
+		}
+	}
+
+	private createServiceWorkerPath( serviceWorkerPath: string, webWorkerPath: string, cssPath: string )
+	{
+		const path = new URL( serviceWorkerPath, window.location.origin )
+
+		path.searchParams.set( `paths`, JSON.stringify( [ window.location.pathname, import.meta.url, webWorkerPath, cssPath ] ) )
+
+		return path.toString()
+	}
+
+	private registerServiceWorker( serviceWorkerPath: string ): void 
+	{
+		if ( `serviceWorker` in navigator ) 
+		{
+			navigator.serviceWorker.register( serviceWorkerPath )
+				.then( ( registration ) =>
+					console.log( `Service Worker registration complete, scope: '${registration.scope}'` ) )
+				.catch( ( error ) =>
+					console.log( `Service Worker registration failed with error: '${error}'` ) )
+		}
 	}
 
 	public emitSample( sample: Sample ): void

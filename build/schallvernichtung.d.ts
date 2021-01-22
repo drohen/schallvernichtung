@@ -14,7 +14,9 @@ export declare class Schallvernichtung implements SampleSystemCoreProvider, UILa
     private mathUtility;
     private ui;
     private cache;
-    constructor(mountSelector: string, workerPath: string, cssPath: string);
+    constructor(mountSelector: string, webWorkerPath: string, cssPath: string, serviceWorkerPath?: string);
+    private createServiceWorkerPath;
+    private registerServiceWorker;
     emitSample(sample: Sample): void;
     addEntity(entity: Entity): void;
     createID(): string;

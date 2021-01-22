@@ -6,7 +6,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAP8ABQUFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREREREREBEREREREREQEREREREREQARAREREREREBEBEREREREAEQEREBEREQARARERERERABEBERAREREAEQEQEBEREQARAQAQEREBAAEBEBAREQEAAQEQEBERAQABARAQEBEBAAEAABAQAAEAAAAAEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
+	<link rel="shortcut icon" href="/schall.ico" />
+
+	<link rel="manifest" href="/manifest.webmanifest">
 
 	<title>schallvernichtung</title>
 
@@ -29,7 +31,7 @@
 	<script type="module">
 		import {Schallvernichtung} from "/schallvernichtung.js"
 		
-		new Schallvernichtung( `#root`, `/recordingWorker.js`, '/schallvernichtung.css' )
+		new Schallvernichtung( `#root`, `/recordingWorker.js`, `/serviceWorker.js`, '/schallvernichtung.css' )
 	</script>
 </body>
 
