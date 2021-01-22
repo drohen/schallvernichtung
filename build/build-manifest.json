@@ -173,8 +173,11 @@
       ]
     },
     "schallvernichtung.js": {
-      "bytes": 1551,
+      "bytes": 2455,
       "imports": [
+        {
+          "path": "__snowpack__/env.js"
+        },
         {
           "path": "recordingHandler.js"
         },
@@ -273,10 +276,10 @@
           "bytesInOutput": 3339
         },
         "schallvernichtung.js": {
-          "bytesInOutput": 773
+          "bytesInOutput": 1294
         }
       },
-      "bytes": 101932
+      "bytes": 102453
     }
   }
 }

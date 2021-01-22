@@ -1,0 +1,15 @@
+{
+	"background_color": "#050505",
+	"description": "Sample, loop, crush",
+	"display": "fullscreen",
+	"icons": [
+		{
+			"src": "schall.jpg",
+			"sizes": "192x192",
+			"type": "image/jpg"
+		}
+	],
+	"name": "Schallvernichtung",
+	"short_name": "xSxVx",
+	"start_url": "/"
+}

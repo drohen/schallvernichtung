@@ -31,3 +31,19 @@ declare function registerProcessor(
 ): undefined;
 
 declare function postMessage(workerMessage: any, transfer?: Transferable[]): void
+
+interface ExtendableEvent extends Event {
+	waitUntil(fn: Promise<any>): void;
+}
+
+interface FetchEvent extends Event {
+	request: Request;
+	respondWith(response: Promise<Response>|Response): Promise<Response>;
+}
+
+interface InstallEvent extends ExtendableEvent {
+	activeWorker: ServiceWorker
+}
+
+interface ActivateEvent extends ExtendableEvent {
+}
